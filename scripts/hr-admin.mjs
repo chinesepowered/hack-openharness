@@ -163,6 +163,25 @@ try {
       }
     }
     writeHandoff(entries);
+  } else if (cmd === 'spend') {
+    // Reconcile spend across OUR harnesses' sessions (GET /v1/sessions?harness=…), per harness.
+    const handoff = JSON.parse(readFileSync(HANDOFF_FILE, 'utf8'));
+    let total = 0; let count = 0;
+    const rows = [];
+    for (const s of handoff.setups) {
+      let cursor = ''; let spend = 0; let n = 0; let secs = 0;
+      for (let page = 0; page < 20; page++) {
+        const q = `/v1/sessions?harness=${encodeURIComponent(s.harness_id)}&limit=100${cursor ? `&cursor=${encodeURIComponent(cursor)}` : ''}`;
+        const { json } = await call('GET', q);
+        for (const x of json.sessions || []) { spend += Number(x.spend_usd) || 0; secs += Number(x.elapsed) || 0; n++; }
+        if (!json.cursor || !(json.sessions || []).length) break;
+        cursor = json.cursor;
+      }
+      rows.push({ feature_key: s.feature_key, sessions: n, spend_usd: Math.round(spend * 10000) / 10000, latest_turn_minutes: Math.round(secs / 6) / 10 }); // the list's `elapsed` covers only the latest turn
+      total += spend; count += n;
+    }
+    for (const r of rows) console.log(JSON.stringify(r));
+    console.log(JSON.stringify({ total_sessions: count, total_spend_usd: Math.round(total * 100) / 100 }));
   } else if (cmd === 'cancel-running') {
     // Stop runaway tasks: cancel every running turn in an OpenHarness data dir (optionally one race group).
     const dataDir = args[0] || join(ROOT, '.data');

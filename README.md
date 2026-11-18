@@ -2,11 +2,13 @@
 
 **Every coding agent. Any model. One platform.**
 
-**OpenHarness is a harness- and model-agnostic coding platform: think Devin or Claude Code on the web, except you choose the agent.** Today AI coding agents are silos. Claude Code, Codex, Qwen Code, Gemini CLI and the rest are each a separate install, login and bill, each tied to one vendor's models, and none of them is the best or cheapest choice for every task. OpenHarness puts **10 agent harnesses and 65 models behind one web app**: connect a repo, pick the harness and the model (or run several side by side), watch the agent work live, and review a real diff with its test results and exact cost. Every task runs on **HarnessRouter**, which gives us sandboxed execution of every harness through one API, so a two-person hackathon team could ship a multi-agent coding platform.
+**OpenHarness is a harness- and model-agnostic coding platform: think Devin or Claude Code on the web, except you choose the agent.** Today AI coding agents are silos. Claude Code, Codex, Qwen Code, Gemini CLI and the rest are each a separate install, login and bill, each tied to one vendor's models, and none of them is the best or cheapest choice for every task. OpenHarness puts **10 agent harnesses and 65 models behind one web app**: connect a repo, pick the harness and the model (or run several side by side), watch the agent work live, and review a real diff with its test results and exact cost. Every task runs on **HarnessRouter**, which gives us sandboxed execution of every harness through one API, so a small hackathon team could ship a multi-agent coding platform in an afternoon.
 
 🎬 **[Watch the 2:53 demo on YouTube](https://www.youtube.com/watch?v=vqSH4NsfjX4).** Everything in it is the real app running real tasks: real repos, real diffs, real costs. (Also in the repo: [`demo/openharness-demo.mp4`](demo/openharness-demo.mp4).)
 
 [![OpenHarness demo video: click to watch on YouTube](https://img.youtube.com/vi/vqSH4NsfjX4/maxresdefault.jpg)](https://www.youtube.com/watch?v=vqSH4NsfjX4)
+
+📓 **[Build log and feedback for HarnessRouter](buildlog.md):** the timeline, our decisions, every HarnessRouter API we used, a task ledger reconciled to HarnessRouter's own spend ($5.33 total), and specific product feedback.
 
 ## The pitch in numbers
 
@@ -209,4 +211,5 @@ src/lib/shared/     browser-safe types, harness metadata, diff parser
 harness/            harness instructions + setups (source of truth for hr:ensure / hr:sync)
 scripts/            hr-admin.mjs (harness admin), hr-smoke.mjs (one-off smoke test)
 demo/               the video pipeline: narration, real-footage recorder, animated cards, ffmpeg assembly
+buildlog.md         how we built it, the task ledger, and our feedback for HarnessRouter
 ```
