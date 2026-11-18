@@ -163,8 +163,20 @@ try {
       }
     }
     writeHandoff(entries);
+  } else if (cmd === 'cancel-running') {
+    // Stop runaway tasks: cancel every running turn in an OpenHarness data dir (optionally one race group).
+    const dataDir = args[0] || join(ROOT, '.data');
+    const group = args[1];
+    const db = JSON.parse(readFileSync(join(dataDir, 'db.json'), 'utf8'));
+    for (const s of Object.values(db.sessions || {})) {
+      if (group && s.groupId !== group) continue;
+      const t = s.turns[s.turns.length - 1];
+      if (!t || !['starting', 'running'].includes(t.status) || !t.responseId) continue;
+      const { json } = await call('POST', `/v1/responses/${encodeURIComponent(t.responseId)}/cancel`, {});
+      console.log(JSON.stringify({ session: s.id, harness: s.harnessKey, model: t.model, status: json.status }));
+    }
   } else {
-    console.log('usage: node scripts/hr-admin.mjs me|bases [id..]|harnesses|ensure|show <id>|sync');
+    console.log('usage: node scripts/hr-admin.mjs me|bases [id..]|harnesses|ensure|show <id>|sync|cancel-running [dataDir] [groupId]');
     process.exit(1);
   }
 } catch (e) {

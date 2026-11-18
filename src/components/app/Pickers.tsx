@@ -148,6 +148,7 @@ export function HarnessGrid({ catalog, selected, onToggle, multi }: {
             key={h.key}
             type="button"
             data-harness={h.key}
+            data-selected={on ? 'true' : 'false'}
             disabled={!h.available}
             onClick={() => onToggle(h.key)}
             className={`relative flex items-center gap-2.5 rounded-xl border p-2.5 text-left transition disabled:cursor-not-allowed disabled:opacity-40 ${on ? 'border-transparent bg-raised' : 'border-line bg-panel2 hover:border-line2 hover:bg-raised/60'}`}

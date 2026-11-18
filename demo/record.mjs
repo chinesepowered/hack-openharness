@@ -237,14 +237,22 @@ async function takeB(ctx) {
   await T.still(800);
   await T.click('[data-testid="race-toggle"]');
   await T.still(500);
-  await T.click('[data-harness="claude-code"]'); // deselect the default
-  await T.click('[data-harness="qwen"]');
-  await T.click('[data-harness="codex"]');
+  // end with exactly Qwen Code + Codex selected, whatever the default was
+  for (const k of ['claude-code', 'qwen', 'codex', 'minimax', 'gemini', 'opencode', 'kimi', 'grok', 'aider', 'openhands']) {
+    const want = k === 'qwen' || k === 'codex';
+    const on = (await page.getAttribute(`[data-harness="${k}"]`, 'data-selected')) === 'true';
+    if (on !== want) await T.click(`[data-harness="${k}"]`);
+  }
+  const sel = await page.$$eval('[data-selected="true"]', (els) => els.map((e) => e.getAttribute('data-harness')));
+  if (sel.sort().join(',') !== 'codex,qwen') throw new Error('race selection wrong: ' + sel.join(','));
   await T.still(800);
-  await T.click('[data-testid="model-picker"] >> nth=1');
+  await T.click('[data-row="codex"] [data-testid="model-picker"]');
   await T.still(700);
   await T.click('[data-model="gpt-6-luna"]');
   await T.still(600);
+  const qm = await page.textContent('[data-row="qwen"] [data-testid="model-picker"]');
+  const cm = await page.textContent('[data-row="codex"] [data-testid="model-picker"]');
+  if (!qm.includes('qwen3.8-max') || !cm.includes('gpt-6-luna')) throw new Error(`race models wrong: ${qm} / ${cm}`);
   await T.click('[data-testid="task-input"]');
   await T.type(TASK_B, 22);
   await T.still(600);

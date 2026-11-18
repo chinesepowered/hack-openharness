@@ -11,13 +11,14 @@
   .warn { color: #f5b74e; } .err { color: #ff6b7a; } .ok { color: #3fd68f; }
   .caret { display: inline-block; width: 11px; height: 22px; background: #c6ccd8; vertical-align: -4px; animation: blink 1s steps(1) infinite; }
   @keyframes blink { 50% { opacity: 0; } }
-  .count { position: absolute; left: 0; right: 0; bottom: 90px; text-align: center; font-size: 56px; font-weight: 650; letter-spacing: -0.02em; }
+  .count { position: absolute; left: 0; right: 0; bottom: 70px; text-align: center; font-size: 56px; font-weight: 650; letter-spacing: -0.02em; z-index: 500; }
+  .count .pill { display: inline-block; padding: 18px 40px; border-radius: 24px; background: rgba(8,9,12,.94); border: 1px solid rgba(255,107,122,.35); box-shadow: 0 30px 90px rgba(0,0,0,.8); }
   .shake.jit { animation: shake .5s ease-in-out 4; }
   @keyframes shake { 0%,100% { translate: 0 0; } 25% { translate: -5px 3px; } 75% { translate: 5px -3px; } }
 </style></head>
 <body><div class="stage"><div class="grid"></div><div class="glow" style="background:rgba(255,107,122,.08)"></div>
 <div id="wrap"></div>
-<div class="count cue" data-cue="count" data-at="10.5">10 harnesses <span style="color:var(--dim)">=</span> <span style="color:#ff8a96">10 terminals to babysit</span></div>
+<div class="count cue" data-cue="count" data-at="10.5"><span class="pill">10 harnesses <span style="color:var(--dim)">=</span> <span style="color:#ff8a96">10 terminals to babysit</span></span></div>
 </div>
 <script>
   const H = [

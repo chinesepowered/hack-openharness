@@ -16,29 +16,29 @@
   .lbl { position: absolute; font-size: 17px; color: var(--mute); text-align: center; }
   .hgrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 18px; }
   .h { display: flex; align-items: center; gap: 10px; border: 1px solid var(--line); background: var(--panel2); border-radius: 12px; padding: 9px 12px; font-size: 18px; }
-  .lock { position: absolute; left: 110px; bottom: 80px; display: flex; gap: 18px; }
+  .lock { position: absolute; left: 110px; bottom: 96px; display: flex; gap: 18px; }
   .pill { border: 1px solid rgba(63,214,143,.35); background: rgba(63,214,143,.08); color: #8ff0bd; border-radius: 999px; padding: 12px 22px; font-size: 21px; }
 </style></head>
 <body><div class="stage"><div class="grid"></div><div class="glow" style="top:50%"></div>
   <div class="title cue on">Under the hood</div>
 
-  <div class="box cue" data-cue="browser" data-at="0.4" style="left:110px; top:250px; width:360px;">
+  <div class="box cue" data-cue="browser" data-at="0.4" style="left:110px; top:340px; width:360px;">
     <div class="k">Browser</div>
     <h3>React UI</h3>
     <ul><li>repo, harness, model</li><li>live steps over SSE</li><li>diff &amp; summary review</li></ul>
   </div>
 
-  <div class="arrow cue" data-cue="backend" data-at="2" style="left:490px; top:420px; width:120px;"><span class="head"></span></div>
+  <div class="arrow cue" data-cue="backend" data-at="2" style="left:490px; top:510px; width:120px;"><span class="head"></span></div>
 
-  <div class="box cue" data-cue="backend" data-at="2" style="left:630px; top:200px; width:520px;">
+  <div class="box cue" data-cue="backend" data-at="2" style="left:630px; top:290px; width:520px;">
     <div class="k">OpenHarness server · Next.js</div>
     <h3>Auth, sessions, repos</h3>
     <ul><li>GitHub OAuth &amp; repo access</li><li>harness key → harness_id (server-side)</li><li>keeps reading after you close the tab</li><li>saves response &amp; session ids per user</li></ul>
   </div>
 
-  <div class="arrow cue" data-cue="api" data-at="5" style="left:1170px; top:420px; width:110px;"><span class="head"></span></div>
+  <div class="arrow cue" data-cue="api" data-at="5" style="left:1170px; top:510px; width:110px;"><span class="head"></span></div>
 
-  <div class="box cue" data-cue="api" data-at="5" style="left:1300px; top:150px; width:510px;">
+  <div class="box cue" data-cue="api" data-at="5" style="left:1300px; top:220px; width:510px;">
     <div class="k">HarnessRouter</div>
     <h3>Responses API</h3>
     <div class="code mono"><span class="key">POST</span> /v1/responses<br>{ <span class="key">input</span>: <span class="s">"Add once()…"</span>,<br>&nbsp;&nbsp;<span class="key">model</span>: <span class="s">"qwen3.8-max"</span>,<br>&nbsp;&nbsp;<span class="key">metadata</span>: { harness_id },<br>&nbsp;&nbsp;<span class="key">stream</span>: true }</div>

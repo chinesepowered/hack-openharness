@@ -8,7 +8,7 @@ Built for the HarnessRouter hackathon. [HarnessRouter](https://harnessrouter.ai)
 
 🎬 **Demo video:** [`demo/openharness-demo.mp4`](demo/openharness-demo.mp4) (3 min)
 
-![The composer: repo, harness, model, task](docs/composer.png)
+![The composer: repo, harness, model, task](docs/composer.jpg)
 
 ## What you can do
 
@@ -21,7 +21,7 @@ Built for the HarnessRouter hackathon. [HarnessRouter](https://harnessrouter.ai)
 | **Race harnesses** | Send one task to 2–4 harnesses at once and compare time, cost, tests and diffs side by side, with *Fastest* and *Cheapest* badges. Continue with the winner. |
 | **Sessions** | Every session (and its HarnessRouter response/session ids) is stored with your account, so you can come back to it. |
 
-![A finished session: result card and diff](docs/result.png)
+![A finished session: result card and diff](docs/result.jpg)
 
 ## How it works
 

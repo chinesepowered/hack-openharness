@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowUp, GitBranch, LoaderCircle, ShieldCheck, Swords, Zap } from 'lucide-react';
 import { useApp } from './AppShell';
@@ -29,12 +29,14 @@ export function Composer() {
   const [error, setError] = useState('');
 
   useEffect(() => { if (!repo && repos.length) { setRepo(repos[0]); setBranch(repos[0].defaultBranch); } }, [repos, repo]);
+  // Pre-select a harness once, when the catalog first arrives. Never re-select after the user clears it.
+  const defaulted = useRef(false);
   useEffect(() => {
-    if (catalog.length && selected.length === 0) {
-      const first = catalog.find((h) => h.available);
-      if (first) setSelected([first.key]);
-    }
-  }, [catalog, selected.length]);
+    if (defaulted.current || !catalog.length) return;
+    defaulted.current = true;
+    const first = catalog.find((h) => h.available);
+    if (first) setSelected((cur) => (cur.length ? cur : [first.key]));
+  }, [catalog]);
 
   const modelFor = (k: HarnessKey) => models[k] || catalog.find((h) => h.key === k)?.defaultModel || '';
   const primary = catalog.find((h) => h.key === selected[0]);
@@ -126,7 +128,7 @@ export function Composer() {
                 {selected.map((k) => {
                   const h = catalog.find((x) => x.key === k);
                   return (
-                    <div key={k} className="flex items-center gap-2.5 rounded-lg border border-line bg-panel2 p-1.5 pl-2.5">
+                    <div key={k} data-row={k} className="flex items-center gap-2.5 rounded-lg border border-line bg-panel2 p-1.5 pl-2.5">
                       <HarnessBadge harness={k} size={24} />
                       <span className="w-[96px] shrink-0 truncate text-[13px]">{h?.label}</span>
                       <div className="min-w-0 flex-1"><ModelPicker harness={h} value={modelFor(k)} onChange={(m) => setModels({ ...models, [k]: m })} compact /></div>

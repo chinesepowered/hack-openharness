@@ -22,7 +22,12 @@ const EDL = [
   { id: '03-solution', parts: [{ take: 'A', from: 'landing', to: 'compose', fill: true }] },
   { id: '04-compose', parts: [{ take: 'A', from: 'compose', to: 'live', fill: true }] },
   { id: '05-live', parts: [{ take: 'A', from: 'live', to: 'result', fill: true, badge: true }] },
-  { id: '06-result', parts: [{ take: 'A', from: 'result', to: 'followup', fill: true }, { take: 'A', from: 'followup', to: 'end', speed: 1.6 }] },
+  { id: '06-result', parts: [{ take: 'A', from: 'result', to: 'followup', fill: true }] },
+  { id: '06b-followup', parts: [
+    { take: 'A', from: 'followup', to: 'followup-live', speed: 1.6 },
+    { take: 'A', from: 'followup-live', to: 'followup-result', fill: true, badge: true },
+    { take: 'A', from: 'followup-result', to: 'end', speed: 1.4 },
+  ] },
   { id: '07-race', parts: [
     { take: 'B', from: 'race-compose', to: 'race-live', speed: 1.9 },
     { take: 'B', from: 'race-live', to: 'race-result', fill: true, badge: true },
@@ -113,6 +118,13 @@ const badgeSpeeds = [...new Set(plan.flatMap((s) => s.parts.filter((p) => p.badg
 await renderBadges(badgeSpeeds);
 
 // ── render segments ─────────────────────────────────────────────────────────────────────────────
+// Fade only where the footage source changes (card ↔ app, take A ↔ take B); cut inside one take.
+plan.forEach((s, i) => {
+  const src = (seg) => seg?.parts[0]?.take;
+  const srcEnd = (seg) => seg?.parts[seg.parts.length - 1]?.take;
+  s.fadeIn = i === 0 || srcEnd(plan[i - 1]) !== src(s);
+  s.fadeOut = i === plan.length - 1 || src(plan[i + 1]) !== srcEnd(s);
+});
 const segFiles = [];
 for (const s of plan) {
   const partFiles = [];
@@ -136,7 +148,8 @@ for (const s of plan) {
   const segOut = join(OUT, `${s.id}.mp4`);
   const sum = s.parts.reduce((a, p) => a + p.out, 0);
   const inputs = partFiles.flatMap((f) => ['-i', f]);
-  const chain = `${partFiles.map((_, i) => `[${i}:v]`).join('')}concat=n=${partFiles.length}:v=1:a=0,tpad=stop_mode=clone:stop_duration=${Math.max(0, s.D - sum).toFixed(3)},fade=t=in:st=0:d=${FADE},fade=t=out:st=${(s.D - FADE).toFixed(3)}:d=${FADE}[v]`;
+  const fades = [s.fadeIn ? `fade=t=in:st=0:d=${FADE}` : null, s.fadeOut ? `fade=t=out:st=${(s.D - FADE).toFixed(3)}:d=${FADE}` : null].filter(Boolean);
+  const chain = `${partFiles.map((_, i) => `[${i}:v]`).join('')}concat=n=${partFiles.length}:v=1:a=0,tpad=stop_mode=clone:stop_duration=${Math.max(0, s.D - sum).toFixed(3)}${fades.length ? ',' + fades.join(',') : ''}[v]`;
   ff([...inputs, '-filter_complex', chain, '-map', '[v]', '-t', s.D.toFixed(3), '-r', String(FPS), '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '14', segOut]);
   // narration, padded to the segment
   const wav = join(OUT, `${s.id}.wav`);
