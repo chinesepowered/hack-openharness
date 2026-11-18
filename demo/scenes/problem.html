@@ -18,7 +18,18 @@
 </style></head>
 <body><div class="stage"><div class="grid"></div><div class="glow" style="background:rgba(255,107,122,.08)"></div>
 <div id="wrap"></div>
-<div class="count cue" data-cue="count" data-at="10.5"><span class="pill">10 harnesses <span style="color:var(--dim)">=</span> <span style="color:#ff8a96">10 terminals to babysit</span></span></div>
+<div class="count cue" data-cue="count" data-at="10.5"><span class="pill">10 agents <span style="color:var(--dim)">=</span> <span style="color:#ff8a96">10 installs, 10 logins, 10 bills</span></span></div>
+<!-- opening headline (v2): shown on cue "intro", cleared on cue "introOut" -->
+<div id="intro" class="cue" data-cue="intro" data-at="999" style="position:absolute;left:0;right:0;top:380px;text-align:center;z-index:600;transition:opacity .5s ease, transform .5s ease">
+  <div style="font-size:30px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);font-weight:600">The state of AI coding</div>
+  <div style="margin-top:22px;font-size:84px;font-weight:650;letter-spacing:-0.03em">Coding agents are a <span style="color:#ff8a96">line item</span> now.</div>
+</div>
+<script>
+  window.addEventListener('load', () => {
+    const c = window.__cues || {};
+    if (typeof c.introOut === 'number') setTimeout(() => { const el = document.getElementById('intro'); el.style.opacity = '0'; el.style.transform = 'translateY(-30px) scale(.97)'; }, c.introOut * 1000);
+  });
+</script>
 </div>
 <script>
   const H = [

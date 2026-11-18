@@ -4,7 +4,7 @@
 //   TAKES=A node demo/record.mjs    one take
 // Output: demo/build/takes/<take>/{NNNNNN.jpg, frames.json}
 import { createRequire } from 'node:module';
-import { mkdirSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { writeFile } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -283,9 +283,121 @@ async function takeB(ctx) {
   writeFileSync(join(BUILD, 'takes', 'B', 'group.txt'), gid);
 }
 
+const TASK_C = 'Add a JSDoc comment above the emit function that documents its parameters. Docs-only change: verify with the type check only.';
+const RACE_C = ['claude-code', 'gemini', 'minimax', 'kimi'];
+
+/** Take C (v2): new landing → 4-agent side by side → Usage & budget. Fresh account. */
+async function takeC(ctx) {
+  const page = await ctx.newPage();
+  const T = new Take(page, 'C');
+  await page.goto(`${BASE}/`, { waitUntil: 'networkidle' });
+  await sleep(800);
+  await T.cast(true);
+  T.mark('landing');
+  await T.move(1250, 620, 900);
+  await T.still(2600);
+  await page.evaluate(() => window.scrollTo({ top: 760, behavior: 'smooth' }));
+  await T.still(2800);
+  await page.evaluate(() => window.scrollTo({ top: 1520, behavior: 'smooth' }));
+  await T.still(2200);
+  await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'smooth' }));
+  await T.still(1600);
+
+  T.mark('c-compose');
+  await T.click('button:has-text("Try the demo")');
+  await page.waitForURL(/\/app$/);
+  await page.locator('[data-harness="qwen"]').waitFor({ timeout: 30000 });
+  await T.still(900);
+  await T.click('[data-testid="race-toggle"]');
+  for (const k of ['claude-code', 'codex', 'qwen', 'minimax', 'gemini', 'opencode', 'kimi', 'grok', 'aider', 'openhands']) {
+    const want = RACE_C.includes(k);
+    const on = (await page.getAttribute(`[data-harness="${k}"]`, 'data-selected')) === 'true';
+    if (on !== want) await T.click(`[data-harness="${k}"]`, { ms: 420, pause: 120 });
+  }
+  const sel = await page.$$eval('[data-selected="true"]', (els) => els.map((e) => e.getAttribute('data-harness')));
+  if (sel.sort().join(',') !== [...RACE_C].sort().join(',')) throw new Error('take C selection wrong: ' + sel.join(','));
+  await T.still(700);
+  await T.click('[data-testid="task-input"]');
+  await T.type(TASK_C, 16);
+  await T.still(500);
+  await T.click('[data-testid="run"]');
+  await page.waitForURL(/\/app\/compare\//, { timeout: 30000 });
+  const gid = page.url().split('/').pop();
+  T.mark('c-live');
+  await T.still(2000);
+  await T.interval(1000, () => groupDone(page, gid));
+  T.mark('c-result');
+  await T.cast(true);
+  await T.still(3500);
+
+  T.mark('c-usage');
+  await T.click('[data-testid="nav-usage"]');
+  await page.waitForURL(/\/app\/usage/);
+  await page.locator('[data-testid="usage-row"]').first().waitFor({ timeout: 20000 });
+  await T.still(1800);
+  const rows = page.locator('[data-testid="usage-row"]');
+  const rb = await rows.nth(0).boundingBox();
+  await T.move(rb.x + rb.width * 0.45, rb.y + rb.height / 2, 600);
+  await T.still(1600);
+  // a budget the month's real spend sits at roughly half of
+  const spent = await page.evaluate(async () => (await (await fetch('/api/usage', { cache: 'no-store' })).json()).usage.spendUsd);
+  const budget = Math.max(1, Math.ceil(spent / 0.45));
+  await T.click('[data-testid="budget-input"]');
+  await T.type(String(budget), 90);
+  await T.still(300);
+  await T.click('[data-testid="budget-save"]');
+  await T.still(3200);
+  T.mark('c-end');
+  await T.save();
+  writeFileSync(join(BUILD, 'takes', 'C', 'group.txt'), `${gid} budget=${budget} spent=${spent}`);
+}
+
+/** Take C2: re-shoot take C's result + Usage screens for the same account (no new agent runs). */
+async function takeC2(ctx) {
+  const { token, gid } = JSON.parse(readFileSync(process.env.C2_FILE, 'utf8'));
+  await ctx.addCookies([{ name: 'oh_session', value: token, domain: 'localhost', path: '/', httpOnly: true, sameSite: 'Lax' }]);
+  const page = await ctx.newPage();
+  const T = new Take(page, 'C2');
+  await page.goto(`${BASE}/app/compare/${gid}`, { waitUntil: 'networkidle' });
+  await page.evaluate(() => fetch('/api/usage/budget', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ monthlyUsd: null }) }));
+  await page.locator('[data-testid="race-card"]').first().waitFor({ timeout: 20000 });
+  await sleep(1200);
+  await T.cast(true);
+  T.mark('c2-result');
+  await T.move(1500, 700, 600);
+  await T.still(3500);
+  T.mark('c2-usage');
+  await T.click('[data-testid="nav-usage"]');
+  await page.waitForURL(/\/app\/usage/);
+  await page.locator('[data-testid="usage-row"]').first().waitFor({ timeout: 20000 });
+  await T.still(1800);
+  const rb = await page.locator('[data-testid="usage-row"]').nth(0).boundingBox();
+  await T.move(rb.x + rb.width * 0.45, rb.y + rb.height / 2, 600);
+  await T.still(1600);
+  await T.click('[data-testid="budget-input"]');
+  await T.type('3', 90);
+  await T.still(300);
+  await T.click('[data-testid="budget-save"]');
+  await T.still(3200);
+  T.mark('c2-end');
+  await T.save();
+}
+
 const browser = await chromium.launch();
 const ctx = await browser.newContext({ viewport: { width: 1920, height: 1080 }, deviceScaleFactor: 1, colorScheme: 'dark' });
 await ctx.addInitScript(CURSOR);
+if (TAKES.length === 1 && TAKES[0] === 'C2') {
+  await takeC2(ctx);
+  await browser.close();
+  console.log('done');
+  process.exit(0);
+}
+if (TAKES.length === 1 && TAKES[0] === 'C') {
+  await takeC(ctx);
+  await browser.close();
+  console.log('done');
+  process.exit(0);
+}
 let resolveSignedIn;
 const signedIn = new Promise((r) => { resolveSignedIn = r; });
 const jobs = [];

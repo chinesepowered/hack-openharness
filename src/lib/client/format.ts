@@ -1,8 +1,9 @@
 export function fmtDuration(sec?: number): string {
   if (sec === undefined || !Number.isFinite(sec)) return '–';
-  if (sec < 60) return `${Math.round(sec)}s`;
-  const m = Math.floor(sec / 60);
-  const s = Math.round(sec % 60);
+  const total = Math.round(sec); // round first, so 659.9 s is "11m 00s", never "10m 60s"
+  if (total < 60) return `${total}s`;
+  const m = Math.floor(total / 60);
+  const s = total % 60;
   return `${m}m ${String(s).padStart(2, '0')}s`;
 }
 

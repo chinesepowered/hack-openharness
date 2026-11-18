@@ -16,7 +16,33 @@ const FADE = 0.22;
 // ── edit decision list ──────────────────────────────────────────────────────────────────────────
 // Each segment plays under one narration clip. Parts: {take, from, to} with `speed` (fixed) or
 // `fill` (gets whatever time is left, badge shown when sped up). `hold` adds seconds of picture.
-const EDL = [
+// v2 (default): the business cut. CUT=v1 rebuilds the first cut.
+const EDL_V2 = [
+  { id: 'v2-01-market', parts: [{ take: 'card-v2-01-market', from: 'start', to: 'end', speed: 1 }] },
+  { id: 'v2-02-insight', parts: [{ take: 'card-v2-02-insight', from: 'start', to: 'end', speed: 1 }] },
+  { id: 'v2-03-solution', parts: [{ take: 'C', from: 'landing', to: 'c-compose', fill: true }] },
+  { id: 'v2-04-compose', parts: [{ take: 'A', from: 'compose', to: 'live', startOffset: 2.2, fill: true }] },
+  { id: 'v2-05-live', parts: [{ take: 'A', from: 'live', to: 'result', fill: true, badge: true }] },
+  { id: 'v2-06-result', parts: [
+    { take: 'A', from: 'result', to: 'followup', endOffset: -19, speed: 1.6 },
+    { take: 'A', from: 'followup-result', to: 'end', speed: 2.0 },
+  ] },
+  { id: 'v2-07-race', parts: [{ take: 'B', from: 'race-compose', to: 'race-live', fill: true }] },
+  { id: 'v2-07b-race-result', parts: [
+    { take: 'B', from: 'race-live', to: 'race-result', fill: true, badge: true, minFill: 4 },
+    { take: 'B', from: 'race-result', to: 'end', speed: 1.6 },
+  ] },
+  { id: 'v2-08-usage', parts: [
+    { take: 'C', from: 'c-live', to: 'c-result', fill: true, badge: true, minFill: 2.5 },
+    { take: 'C2', from: 'c2-result', to: 'c2-usage', speed: 1.4 },
+    { take: 'C2', from: 'c2-usage', to: 'c2-end', speed: 1.5 },
+  ] },
+  { id: 'v2-09-harnessrouter', parts: [{ take: 'card-v2-09-harnessrouter', from: 'start', to: 'end', speed: 1 }] },
+  { id: 'v2-10-business', parts: [{ take: 'card-v2-10-business', from: 'start', to: 'end', speed: 1 }] },
+  { id: 'v2-11-close', parts: [{ take: 'card-v2-11-close', from: 'start', to: 'end', speed: 1, endOffset: -0.8 }] },
+];
+
+const EDL_V1 = [
   { id: '01-hook', parts: [{ take: 'card-01-hook', from: 'start', to: 'end', speed: 1 }] },
   { id: '02-problem', parts: [{ take: 'card-02-problem', from: 'start', to: 'end', speed: 1 }] },
   { id: '03-solution', parts: [{ take: 'A', from: 'landing', to: 'compose', fill: true }] },
@@ -36,6 +62,7 @@ const EDL = [
   { id: '08-arch', parts: [{ take: 'card-08-arch', from: 'start', to: 'end', speed: 1 }] },
   { id: '09-close', parts: [{ take: 'card-09-close', from: 'start', to: 'end', speed: 1, endOffset: -1.2 }] },
 ];
+const EDL = process.env.CUT === 'v1' ? EDL_V1 : EDL_V2;
 
 const takes = {};
 function take(name) {
@@ -98,7 +125,7 @@ for (const seg of EDL) {
   let D = LEAD + audioDuration(seg.id) + TAIL + (seg.hold || 0);
   const parts = seg.parts.map((p) => {
     const t = take(p.take);
-    const from = markTime(t, p.from);
+    const from = markTime(t, p.from) + (p.startOffset || 0);
     const to = markTime(t, p.to) + (p.endOffset || 0);
     return { ...p, raw: to - from, fromT: from, toT: to };
   });

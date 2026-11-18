@@ -12,6 +12,9 @@ const SHOTS = [
   ['A', 'result', 5.0, 'result.jpg'],
   ['B', 'end', -0.5, 'race.jpg'],
   ['A', 'live', 300, 'session.jpg'],
+  ['C2', 'c2-end', -1.0, 'usage.jpg'],
+  ['C', 'landing', 1.8, 'landing.jpg'],
+  ['C2', 'c2-usage', -0.3, 'four-agents.jpg'],
 ];
 for (const [take, mark, off, name] of SHOTS) {
   const d = JSON.parse(readFileSync(join(BUILD, 'takes', take, 'frames.json'), 'utf8'));

@@ -2,7 +2,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { LogOut, Plus, Swords } from 'lucide-react';
+import { ChartColumn, LogOut, Plus, Swords } from 'lucide-react';
 import { Logo } from '@/components/icons';
 import { HarnessBadge } from '@/components/HarnessBadge';
 import { api } from '@/lib/client/api';
@@ -90,6 +90,9 @@ export function AppShell({ user, children }: { user: PublicUser; children: React
           <div className="px-3 pb-3">
             <Link href="/app" className={`flex items-center gap-2 rounded-lg border border-line2 px-3 py-2 text-sm transition hover:bg-raised ${pathname === '/app' ? 'bg-raised' : 'bg-panel2'}`}>
               <Plus className="size-4 text-brand" /> New session
+            </Link>
+            <Link href="/app/usage" data-testid="nav-usage" className={`mt-1 flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition hover:bg-panel2 ${pathname === '/app/usage' ? 'bg-raised text-text' : 'text-mute'}`}>
+              <ChartColumn className="size-4" /> Usage &amp; budget
             </Link>
           </div>
           <div className="px-4 pb-1.5 pt-2 text-[11px] font-medium uppercase tracking-[0.12em] text-dim">Sessions</div>

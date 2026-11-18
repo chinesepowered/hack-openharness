@@ -1,6 +1,6 @@
 import { newId, putGroup } from '@/lib/server/db';
 import { fail, json, readJson, requireUser } from '@/lib/server/http';
-import { checkCapacity, cleanPrompt, InputError, resolveHarness, resolveRepoFor, startSession } from '@/lib/server/sessions';
+import { checkBudget, checkCapacity, cleanPrompt, InputError, resolveHarness, resolveRepoFor, startSession } from '@/lib/server/sessions';
 import { publicGroup } from '@/lib/server/views';
 
 export const runtime = 'nodejs';
@@ -24,6 +24,7 @@ export async function POST(req: Request) {
     if (new Set(keys).size !== keys.length) throw new InputError('Each run needs a different harness or model.');
     const repo = await resolveRepoFor(a.user, body.repo, body.branch);
     checkCapacity(a.user, resolved.length);
+    checkBudget(a.user);
     const groupId = newId('g');
     const sessions = resolved.map((h) => startSession(a.user, repo, h, prompt, groupId));
     const gr = { id: groupId, userId: a.user.id, prompt, repo, sessionIds: sessions.map((s) => s.id), createdAt: Date.now() };

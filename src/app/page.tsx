@@ -1,4 +1,4 @@
-import { ArrowRight, Columns3, Layers, ShieldCheck } from 'lucide-react';
+import { ArrowRight, Columns3, Layers, Wallet } from 'lucide-react';
 import { Logo } from '@/components/icons';
 import { HarnessBadge } from '@/components/HarnessBadge';
 import { SignInButtons } from '@/components/SignIn';
@@ -47,12 +47,11 @@ export default async function Landing({ searchParams }: { searchParams: Promise<
               <span className="size-1.5 rounded-full bg-ok" /> Powered by HarnessRouter · {keys.length} harnesses{distinct ? ` · ${distinct} models` : ''}
             </div>
             <h1 className="text-[44px] font-semibold leading-[1.04] tracking-[-0.03em] sm:text-[62px]">
-              One coding agent.<br /><span className="brand-text">Every harness.</span>
+              Every coding agent.<br /><span className="brand-text">One platform.</span>
             </h1>
             <p className="mt-6 max-w-xl text-[17px] leading-relaxed text-mute">
-              OpenCode made the <em className="text-text not-italic">model</em> swappable. OpenHarness makes the <em className="text-text not-italic">harness</em> swappable too.
-              Run Claude Code, Codex, Qwen Code, MiniMax, Gemini CLI, OpenCode and more on your GitHub repos, with any model each one supports, from one web app.
-              Pick whatever fits: your favorite, a harness&apos;s strengths and quirks, speed or cost.
+              Claude Code, Codex, Qwen Code, MiniMax, Gemini CLI, OpenCode and more, with any model each one supports, on your GitHub repos.
+              Pick the right <em className="text-text not-italic">harness</em> and <em className="text-text not-italic">model</em> for each task, pay only for what it uses, and review every change in one place.
             </p>
             <div className="mt-9">
               <SignInButtons githubOAuth={oauth} signedIn={Boolean(user)} />
@@ -86,9 +85,9 @@ export default async function Landing({ searchParams }: { searchParams: Promise<
 
         <section className="grid gap-4 pb-20 md:grid-cols-3">
           {[
-            { icon: Layers, title: 'Harness and model, your call', body: 'Every harness brings its own tools, system prompt and agent loop. Pair it with models from OpenAI, Anthropic, Google, Qwen, DeepSeek, Moonshot and more.' },
-            { icon: Columns3, title: 'Compare them side by side', body: 'Every harness has its own strengths and quirks. Send one task to up to four at once, compare time, cost, tests and diffs, and keep going with the one you like.' },
-            { icon: ShieldCheck, title: 'Safe by design', body: 'Agents work in isolated HarnessRouter sandboxes and hand back a patch for you to review. API keys and harness ids never reach the browser.' },
+            { icon: Layers, title: 'Every agent, one place', body: `${keys.length} harnesses and ${distinct || 'dozens of'} models behind one login and one review flow. No CLIs to install, no provider keys to juggle, no lock-in.` },
+            { icon: Wallet, title: 'Pay for what each task needs', body: 'Every task shows its metered cost. Send routine work to fast, cheap agents and hard problems to premium ones: in our demo the same task cost $0.03 or $0.90.' },
+            { icon: Columns3, title: 'Compare, then decide', body: 'Run one task on up to four agents side by side and keep the patch you like best. Monthly budgets keep team spend on track.' },
           ].map(({ icon: Icon, title, body }) => (
             <div key={title} className="rounded-2xl border border-line bg-panel/70 p-6">
               <Icon className="mb-4 size-5 text-brand" />

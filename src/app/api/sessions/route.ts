@@ -1,7 +1,7 @@
 import { listSessions } from '@/lib/server/db';
 import { fail, json, readJson, requireUser } from '@/lib/server/http';
 import { recoverOnce } from '@/lib/server/runner';
-import { checkCapacity, cleanPrompt, InputError, resolveHarness, resolveRepoFor, startSession } from '@/lib/server/sessions';
+import { checkBudget, checkCapacity, cleanPrompt, InputError, resolveHarness, resolveRepoFor, startSession } from '@/lib/server/sessions';
 import { publicSession, sessionSummary } from '@/lib/server/views';
 
 export const runtime = 'nodejs';
@@ -26,6 +26,7 @@ export async function POST(req: Request) {
     const h = await resolveHarness(body.harness, body.model);
     const repo = await resolveRepoFor(a.user, body.repo, body.branch);
     checkCapacity(a.user);
+    checkBudget(a.user);
     const s = startSession(a.user, repo, h, prompt);
     return json({ session: publicSession(s) }, 201);
   } catch (e) {

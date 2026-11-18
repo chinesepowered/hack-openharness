@@ -125,6 +125,32 @@ export type LiveEvent =
   | { type: 'delta'; turnId: string; key: string; delta: string }
   | { type: 'turn'; turn: PublicTurn; sessionStatus: TurnStatus };
 
+export interface UsageRow {
+  harness: HarnessKey;
+  model: string;
+  tasks: number;
+  completed: number;
+  totalUsd: number;
+  totalSec: number;
+  timedTasks: number;
+  testsPassed: number;
+  testsKnown: number;
+}
+
+export interface PublicUsage {
+  monthStart: number;
+  spendUsd: number;
+  tasks: number;
+  combos: number;
+  harnesses: number;
+  budgetUsd: number | null;
+  byCombo: UsageRow[];
+  recent: Array<{
+    sessionId: string; title: string; harness: HarnessKey; model: string; status: TurnStatus;
+    costUsd?: number; elapsedSec?: number; startedAt: number; groupId?: string;
+  }>;
+}
+
 export interface PublicGroup {
   id: string;
   prompt: string;

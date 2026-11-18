@@ -4,7 +4,7 @@
 
 **OpenHarness is a harness- and model-agnostic coding platform: think Devin or Claude Code on the web, except you choose the agent.** Today AI coding agents are silos. Claude Code, Codex, Qwen Code, Gemini CLI and the rest are each a separate install, login and bill, each tied to one vendor's models, and none of them is the best or cheapest choice for every task. OpenHarness puts **10 agent harnesses and 65 models behind one web app**: connect a repo, pick the harness and the model (or run several side by side), watch the agent work live, and review a real diff with its test results and exact cost. Every task runs on **HarnessRouter**, which gives us sandboxed execution of every harness through one API, so a two-person hackathon team could ship a multi-agent coding platform.
 
-🎬 **[Watch the 2:59 demo](demo/openharness-demo.mp4).** Everything in it is the real app running real tasks: real repos, real diffs, real costs.
+🎬 **[Watch the 2:53 demo](demo/openharness-demo.mp4).** Everything in it is the real app running real tasks: real repos, real diffs, real costs.
 
 ![Two agents, same task, side by side: Codex on gpt-6-luna vs Qwen Code on qwen3.8-max](docs/race.jpg)
 
@@ -17,6 +17,7 @@ All from real runs in the demo, on the open-source [`developit/mitt`](https://gi
 | **Choice** | 10 harnesses × 65 models = **453 agent combinations**, read live from HarnessRouter |
 | **Cost** | Same task, two agents: **Codex + `gpt-6-luna`: $0.03, 4m 48s** vs **Qwen Code + `qwen3.8-max`: $0.90, 12m 44s, all 28 tests passing**. That's a **27× price spread**: route routine work to cheap agents and save premium ones for the hard problems. |
 | **Quality** | Qwen Code + `qwen3.8-max` added `once()` to mitt with **10 new tests, all passing**, plus docs, for $1.20. A follow-up question was answered from the same session's context in 63 s for $0.15. |
+| **Visibility** | Four agents, one docs task: **$0.08 (Claude Code) to $0.65 (Gemini CLI), an 8× spread**, metered per task on the Usage page, with a monthly budget the server enforces |
 | **Breadth** | **All 10 harnesses verified** on real tasks (37–57 s, $0.01–$0.13 each for a code question) |
 | **Integration** | **One API** for all of it: HarnessRouter's Responses API |
 
@@ -75,7 +76,7 @@ A harness's `base` is fixed, but its model can be chosen per task. So OpenHarnes
 
 ### 3. Sessions and files
 
-When a task ends, the server lists `GET /v1/sessions/{id}/files`, downloads the `out/` deliverables with the key, and turns them into the result card: diff viewer, `SUMMARY.md`, test status and a downloadable patch. The session's `spend_usd` becomes the **per-task cost shown to the user**. That's the number behind the cost story.
+When a task ends, the server lists `GET /v1/sessions/{id}/files`, downloads the `out/` deliverables with the key, and turns them into the result card: diff viewer, `SUMMARY.md`, test status and a downloadable patch. The session's `spend_usd` becomes the **per-task cost shown to the user**. That's the number behind the cost story: it feeds the **Usage page** (spend by harness × model) and the **monthly budget**, which the server enforces before starting any task, side-by-side run or follow-up (HTTP 402 once the cap is reached).
 
 ### 4. Catalog
 
@@ -148,11 +149,22 @@ sequenceDiagram
   O->>H: POST /v1/responses {previous_response_id, session_id}
 ```
 
+## Product tour
+
+| | |
+|---|---|
+| ![Landing: every coding agent, one platform](docs/landing.jpg) | ![Composer: repo, harness, model, task](docs/composer.jpg) |
+| **Every coding agent, one platform.** | **Pick any harness × model.** 10 harnesses, 65 models, one composer. |
+| ![Live session](docs/session.jpg) | ![Result: summary, tests, diff, cost](docs/result.jpg) |
+| **Watch it work.** Every command and edit streams in live. | **Review like a PR.** Summary, test status, full diff, exact cost, then follow up in the same session. |
+| ![Four agents side by side](docs/four-agents.jpg) | ![Usage and budget](docs/usage.jpg) |
+| **Run agents side by side.** Claude Code, MiniMax, Gemini CLI and Kimi on the same change. | **Usage & budgets.** Spend per harness × model, metered by HarnessRouter, with a monthly cap. |
+
 ## Why it's a business
 
 * **Who pays:** developers and teams who already pay for several coding agents and still switch between them.
 * **What they get:** **options** (the right harness and model for each task, never locked in), **lower cost** (cheap agents for routine work, premium ones only when needed: a 27× spread on the same task in our demo) and **one platform** (one login, one bill, one review flow for every agent).
-* **How we make money:** pay-per-task credits with a margin on top of each HarnessRouter run, and team plans with spend budgets, harness and model policies, shared sessions, SSO and audit.
+* **How we make money:** pay-per-task credits with a margin on top of each HarnessRouter run, and team plans with spend budgets (already built and enforced), harness and model policies, shared sessions, SSO and audit.
 * **The moat:** every task records time, cost and test outcomes per repo × harness × model. That data powers **Auto mode** (next): routing each task to the best harness and model for its budget, and per-codebase leaderboards no single-vendor agent can offer.
 * **Why HarnessRouter wins too:** every OpenHarness task is a HarnessRouter task. It's a consumer product that turns their API into end-user revenue, and it gets better every time HarnessRouter adds a harness.
 
@@ -162,7 +174,8 @@ sequenceDiagram
 |---|---|
 | 10 harnesses × 65 models, live catalog | **Auto mode**: pick the harness and model per task and budget |
 | Live streaming sessions, follow-ups, mid-session model switch | Open the reviewed patch as a GitHub PR (GitHub App, issue → PR) |
-| Side-by-side runs with time, cost and test comparison | Billing (credits), team budgets and policies |
+| Side-by-side runs with time, cost and test comparison | Billing (credits), team plans and harness/model policies |
+| **Usage & budgets**: metered cost per harness × model, monthly budget enforced server-side | |
 | Diff review, `SUMMARY.md`, patch download | Per-repo leaderboards from recorded outcomes |
 | GitHub OAuth (needs an OAuth app; the demo runs in demo mode on public repos) | Postgres instead of the JSON store |
 | Crash recovery, tenancy checks, idempotency, cancel | |

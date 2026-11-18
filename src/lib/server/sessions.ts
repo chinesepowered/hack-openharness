@@ -5,6 +5,7 @@ import { harnessIdFor, defaultModelFor } from './harnesses';
 import { catalog, modelAllowed } from './catalog';
 import { resolveRepo } from './github';
 import { isActive, launchTurn, runningCount } from './runner';
+import { monthToDateSpend } from './usage';
 import { isHarnessKey, type HarnessKey } from '@/lib/shared/harness-meta';
 
 export const MAX_PROMPT = 8000;
@@ -52,6 +53,15 @@ function titleFrom(prompt: string): string {
   return one.length > 64 ? `${one.slice(0, 63)}…` : one;
 }
 
+/** Enforce the user's monthly budget (metered HarnessRouter spend, month to date). */
+export function checkBudget(user: UserRec) {
+  if (typeof user.budgetUsd !== 'number') return;
+  const spent = monthToDateSpend(user.id);
+  if (spent >= user.budgetUsd) {
+    throw new InputError(`You've reached your monthly budget of $${user.budgetUsd.toFixed(2)} ($${spent.toFixed(2)} spent). Raise it on the Usage page to keep going.`, 402);
+  }
+}
+
 export function checkCapacity(user: UserRec, adding = 1) {
   if (runningCount(user.id) + adding > MAX_RUNNING_PER_USER) {
     throw new InputError(`You already have ${MAX_RUNNING_PER_USER} tasks running. Wait for one to finish.`, 429);
@@ -80,6 +90,7 @@ export async function followUp(user: UserRec, sessionId: string, promptRaw: unkn
   if (isActive(s.turns[s.turns.length - 1])) throw new InputError('The agent is still working on the previous message.', 409);
   if (!s.hrSessionId || !s.turns.some((t) => t.responseId)) throw new InputError('This session cannot be continued. Start a new one.', 409);
   checkCapacity(user);
+  checkBudget(user);
   const m = typeof modelRaw === 'string' && modelRaw ? modelRaw : s.turns[s.turns.length - 1]?.model || s.model;
   if (!(await modelAllowed(s.harnessKey, m))) throw new InputError('That model is not available on this harness.');
   const turn = newTurn(prompt, m);

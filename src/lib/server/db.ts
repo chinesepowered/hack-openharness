@@ -20,6 +20,8 @@ export interface UserRec {
   avatarUrl: string;
   githubToken?: string;
   customRepos?: RepoOption[];
+  /** Monthly spend cap in USD; new tasks are refused once month-to-date spend reaches it. */
+  budgetUsd?: number;
   createdAt: number;
 }
 

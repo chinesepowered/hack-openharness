@@ -28,6 +28,26 @@ const CARDS = {
   '09-close': ['close.html', {
     name: ['OpenHarness', 0, -0.1], t1: ['Any harness', 0, 0], t2: ['Any model', 0, 0], t3: ['Your choice', 0, 0], meta: ['Your choice', 0, 0.9],
   }, 2.6],
+  // ── v2 (business cut) ──
+  'v2-01-market': ['problem.html', {
+    h0: ['Claude Code', 0, 0], h1: ['Codex', 0, 0], h2: ['Qwen Code', 0, 0], h3: ['MiniMax', 0, 0], h4: ['Gemini CLI', 0, 0],
+    install: ['separate install', 0, 0.2], login: ['login', 0, 0.1], more: ['own models', 0, 0], count: ['none of them', 0, 0],
+    intro: ['AI coding', 0, -0.3], introOut: ['Claude Code', 0, -0.35],
+  }, 0.6],
+  'v2-02-insight': ['hook.html', {
+    agent: ['an agent', 0, 0], model: ['a model', 0, 0.1], harness: ['a harness', 0, 0.1],
+    tools: ['tools', 0, 0], prompts: ['prompts', 0, 0], loop: ['loop', 0, 0], sub: ['OpenCode', 0, 0], tag: ['The harness matters', 0, 0],
+  }, 0.4],
+  'v2-09-harnessrouter': ['arch.html', {
+    browser: ['We built', 0, 0.2], backend: ['during the hackathon', 0, 0], api: ['one API', 0, 0], bases: ['every harness', 0, 0],
+    keys: ['config change', 0, 0], keys2: ['zero work', 0, 0],
+  }, 0.6],
+  'v2-10-business': ['business.html', {
+    head: ['real business', 0, -0.4], c1: ['pay per task', 0, 0], c2: ['teams pay', 0, 0], c3: ['Auto mode', 0, 0], banner: ['Every task we sell', 0, 0],
+  }, 1.2],
+  'v2-11-close': ['close.html', {
+    name: ['OpenHarness', 0, -0.1], t1: ['Any harness', 0, 0], t2: ['Any model', 0, 0], t3: ['One platform', 0, 0], meta: ['One platform', 0, 0.9],
+  }, 2.2],
 };
 
 const only = new Set(process.argv.slice(2));

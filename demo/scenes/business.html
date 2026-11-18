@@ -1,0 +1,49 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>business</title><link rel="stylesheet" href="scene.css">
+<style>
+  .title { position: absolute; left: 110px; top: 86px; font-size: 22px; letter-spacing: .16em; text-transform: uppercase; color: var(--dim); font-weight: 600; }
+  .head { position: absolute; left: 110px; top: 128px; font-size: 58px; font-weight: 650; letter-spacing: -0.025em; }
+  .cols { position: absolute; left: 110px; right: 110px; top: 280px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+  .col { border: 1px solid var(--line2); background: rgba(15,17,22,.92); border-radius: 24px; padding: 38px 38px 34px; min-height: 500px; box-shadow: 0 40px 100px -40px rgba(0,0,0,.9); }
+  .k { display: inline-flex; align-items: center; gap: 10px; font-size: 16px; letter-spacing: .14em; text-transform: uppercase; color: var(--dim); font-weight: 600; }
+  .k .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .col h3 { margin-top: 18px; font-size: 42px; font-weight: 650; letter-spacing: -0.015em; }
+  .col ul { list-style: none; margin-top: 26px; display: grid; gap: 18px; font-size: 26px; color: var(--mute); }
+  .col li::before { content: '→'; color: var(--brand); margin-right: 12px; }
+  .stat { margin-top: 26px; display: inline-flex; gap: 10px; align-items: baseline; border-top: 1px solid var(--line); padding-top: 18px; width: 100%; }
+  .stat b { font-size: 34px; font-weight: 650; color: var(--text); }
+  .stat span { font-size: 19px; color: var(--dim); }
+  .next { position: relative; border-color: rgba(139,124,255,.5); box-shadow: 0 0 0 1px rgba(139,124,255,.25), 0 40px 120px -40px rgba(111,92,255,.6); }
+  .badge-next { position: absolute; top: -16px; right: 26px; font-size: 15px; font-weight: 700; letter-spacing: .12em; color: #0b0d12; background: linear-gradient(92deg, #b4a9ff, #38d0ff); padding: 7px 14px; border-radius: 999px; }
+  .banner { position: absolute; left: 110px; right: 110px; bottom: 90px; display: flex; align-items: center; justify-content: center; gap: 18px; padding: 22px 30px; border-radius: 22px; border: 1px solid rgba(63,214,143,.35); background: rgba(63,214,143,.07); font-size: 30px; font-weight: 600; }
+  .banner .g { color: #8ff0bd; }
+</style></head>
+<body><div class="stage"><div class="grid"></div><div class="glow" style="top:55%"></div>
+  <div class="title cue on">The business</div>
+  <div class="head cue" data-cue="head" data-at="0.4">Options and lower cost, <span class="brand-text">on one platform.</span></div>
+
+  <div class="cols">
+    <div class="col cue" data-cue="c1" data-at="2">
+      <div class="k"><span class="dot" style="background:#8b7cff"></span>Developers</div>
+      <h3>Pay per task</h3>
+      <ul><li>credits, metered per task</li><li>our margin on every run</li><li>no subscriptions to juggle</li></ul>
+      <div class="stat"><b>$0.03 – $1.20</b><span>per task in this demo</span></div>
+    </div>
+    <div class="col cue" data-cue="c2" data-at="5">
+      <div class="k"><span class="dot" style="background:#38d0ff"></span>Teams</div>
+      <h3>Plans for teams</h3>
+      <ul><li>budgets &amp; spend caps</li><li>harness &amp; model policies</li><li>shared sessions, SSO, audit</li></ul>
+      <div class="stat"><b>Budgets</b><span>already enforced in the app</span></div>
+    </div>
+    <div class="col next cue" data-cue="c3" data-at="8">
+      <span class="badge-next">NEXT</span>
+      <div class="k"><span class="dot" style="background:#3fd68f"></span>The moat</div>
+      <h3>Auto mode</h3>
+      <ul><li>best harness × model per task</li><li>tuned to each task's budget</li><li>learned from recorded time, cost &amp; tests</li></ul>
+      <div class="stat"><b>453</b><span>harness × model combos to route across</span></div>
+    </div>
+  </div>
+  <div class="banner cue" data-cue="banner" data-at="12">Every task we sell is a <span class="g">HarnessRouter task.</span></div>
+</div>
+<script src="cues.js"></script>
+</body></html>
