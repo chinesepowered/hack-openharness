@@ -1,0 +1,15 @@
+{
+  "_comment": "Source of truth for `node scripts/hr-admin.mjs ensure|sync`. One HarnessRouter harness per agent base; every one shares instructions.md. The live copy (with harness ids) is harnessrouter.json.",
+  "setups": [
+    { "feature_key": "claude-code", "name": "OpenHarness · Claude Code", "base": "claude-code", "model": "claude-sonnet-5.5", "instructions_file": "instructions.md", "max_step": 250, "timeout_seconds": 3000, "max_cost_usd": 3 },
+    { "feature_key": "codex", "name": "OpenHarness · Codex", "base": "codex", "model": "gpt-6.1-sol", "instructions_file": "instructions.md", "max_step": 250, "timeout_seconds": 3000, "max_cost_usd": 3 },
+    { "feature_key": "qwen", "name": "OpenHarness · Qwen Code", "base": "qwen", "model": "qwen3.8-max", "instructions_file": "instructions.md", "max_step": 250, "timeout_seconds": 3000, "max_cost_usd": 3 },
+    { "feature_key": "minimax", "name": "OpenHarness · MiniMax Code", "base": "minimax", "model": "minimax-m3", "instructions_file": "instructions.md", "max_step": 250, "timeout_seconds": 3000, "max_cost_usd": 3 },
+    { "feature_key": "gemini", "name": "OpenHarness · Gemini CLI", "base": "gemini", "model": "gemini-3.8-flash", "instructions_file": "instructions.md", "max_step": 250, "timeout_seconds": 3000, "max_cost_usd": 3 },
+    { "feature_key": "opencode", "name": "OpenHarness · OpenCode", "base": "opencode", "model": "gpt-6.1-sol", "instructions_file": "instructions.md", "max_step": 250, "timeout_seconds": 3000, "max_cost_usd": 3 },
+    { "feature_key": "kimi", "name": "OpenHarness · Kimi Code", "base": "kimi", "model": "kimi-k3", "instructions_file": "instructions.md", "max_step": 250, "timeout_seconds": 3000, "max_cost_usd": 3 },
+    { "feature_key": "grok", "name": "OpenHarness · Grok Build", "base": "grok", "model": "grok-4.6", "instructions_file": "instructions.md", "max_step": 250, "timeout_seconds": 3000, "max_cost_usd": 3 },
+    { "feature_key": "aider", "name": "OpenHarness · Aider", "base": "aider", "model": "gpt-6.1-sol", "instructions_file": "instructions.md", "max_step": 250, "timeout_seconds": 3000, "max_cost_usd": 3 },
+    { "feature_key": "openhands", "name": "OpenHarness · OpenHands", "base": "openhands", "model": "gpt-5.4", "instructions_file": "instructions.md", "max_step": 250, "timeout_seconds": 3000, "max_cost_usd": 3 }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "voice": { "name": "Jessica", "voice_id": "cgSgspJ2msm6clMCkdW9", "model_id": "eleven_v4" },
+  "scenes": [
+    {
+      "id": "01-hook",
+      "visual": "Title card: OpenHarness logo, 'One coding agent. Every harness.'",
+      "text": "Every coding agent is really two things: a model, and a harness. The harness is the tools, the prompts and the loop that turn a model into an engineer. Tools like OpenCode let you swap the model. But the harness matters just as much."
+    },
+    {
+      "id": "02-problem",
+      "visual": "Harness badges appear one by one, each its own CLI",
+      "text": "Claude Code. Codex. Qwen Code. MiniMax. Gemini CLI. Each one is a separate install, a separate login, a separate way of working. Comparing them on your own code means babysitting a terminal for every one."
+    },
+    {
+      "id": "03-solution",
+      "visual": "OpenHarness landing page",
+      "text": "So we built OpenHarness: a web coding agent where you choose the harness and the model. Ten harnesses, more than sixty models, one place, powered by HarnessRouter."
+    },
+    {
+      "id": "04-compose",
+      "visual": "Sign in, pick repo, pick Qwen Code, pick qwen3.8-max, type the task, run",
+      "text": "Sign in and pick a repository. Here it's mitt, a tiny event emitter. Choose the harness: Qwen Code. Then the model. Qwen Code can run sixty of them, from Qwen and DeepSeek to Claude and GPT. We'll take Qwen 3.8 Max. Describe the task, and run it."
+    },
+    {
+      "id": "05-live",
+      "visual": "Session view streaming live steps (sped up)",
+      "text": "OpenHarness streams the harness's work as it happens: every command, every edit. The agent runs in an isolated HarnessRouter sandbox. It clones the repo, runs the existing tests, writes the change, and checks its own work."
+    },
+    {
+      "id": "06-result",
+      "visual": "Result card, tests passed, diff viewer, summary",
+      "text": "When it's done, you get something you can review: a summary, the test status, the full diff, and exactly what it cost. Want changes? Just follow up in the same session, and the harness keeps its full context."
+    },
+    {
+      "id": "07-race",
+      "visual": "Race mode: Qwen Code on qwen3.8-max vs Codex on gpt-6-luna",
+      "text": "And because every harness is one click away, you can race them. Send the same task to Qwen Code and to Codex running GPT-6 Luna, side by side. Compare time, cost, tests and diffs, then keep the patch you like best."
+    },
+    {
+      "id": "08-arch",
+      "visual": "Architecture: Browser -> OpenHarness backend -> HarnessRouter Responses API -> one harness per base",
+      "text": "Under the hood, our Next.js backend owns sign-in, sessions and repo access. It calls HarnessRouter's Responses API, with one harness per agent base and the model chosen per task. API keys and harness IDs never reach the browser."
+    },
+    {
+      "id": "09-close",
+      "visual": "Closing card",
+      "text": "OpenHarness. Any harness. Any model. Your repo."
+    }
+  ]
+}

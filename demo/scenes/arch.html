@@ -1,0 +1,62 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>arch</title><link rel="stylesheet" href="scene.css">
+<style>
+  .title { position: absolute; left: 110px; top: 80px; font-size: 22px; letter-spacing: .16em; text-transform: uppercase; color: var(--dim); font-weight: 600; }
+  .box { position: absolute; border: 1px solid var(--line2); background: rgba(15,17,22,.92); border-radius: 22px; padding: 28px 30px; box-shadow: 0 40px 100px -40px rgba(0,0,0,.9); }
+  .box h3 { font-size: 30px; font-weight: 650; letter-spacing: -0.01em; display: flex; align-items: center; gap: 14px; }
+  .box .k { font-size: 15px; text-transform: uppercase; letter-spacing: .14em; color: var(--dim); font-weight: 600; margin-bottom: 10px; }
+  .box ul { list-style: none; margin-top: 18px; display: grid; gap: 10px; font-size: 21px; color: var(--mute); }
+  .box li::before { content: '·'; color: var(--brand); margin-right: 10px; }
+  .code { margin-top: 18px; font-size: 19px; line-height: 1.65; color: #c6ccd8; background: #0a0c10; border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; }
+  .code .s { color: #9ee6b7; } .code .c { color: var(--dim); } .code .key { color: #b4a9ff; }
+  .arrow { position: absolute; height: 3px; background: linear-gradient(90deg, rgba(139,124,255,.15), rgba(139,124,255,.9)); border-radius: 2px; overflow: hidden; }
+  .arrow::after { content: ''; position: absolute; top: 0; left: -30%; width: 30%; height: 100%; background: linear-gradient(90deg, transparent, #fff, transparent); animation: flow 1.4s linear infinite; }
+  @keyframes flow { to { left: 100%; } }
+  .arrow .head { position: absolute; right: -2px; top: -7px; width: 0; height: 0; border-left: 14px solid rgba(139,124,255,.95); border-top: 8.5px solid transparent; border-bottom: 8.5px solid transparent; }
+  .lbl { position: absolute; font-size: 17px; color: var(--mute); text-align: center; }
+  .hgrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 18px; }
+  .h { display: flex; align-items: center; gap: 10px; border: 1px solid var(--line); background: var(--panel2); border-radius: 12px; padding: 9px 12px; font-size: 18px; }
+  .lock { position: absolute; left: 110px; bottom: 80px; display: flex; gap: 18px; }
+  .pill { border: 1px solid rgba(63,214,143,.35); background: rgba(63,214,143,.08); color: #8ff0bd; border-radius: 999px; padding: 12px 22px; font-size: 21px; }
+</style></head>
+<body><div class="stage"><div class="grid"></div><div class="glow" style="top:50%"></div>
+  <div class="title cue on">Under the hood</div>
+
+  <div class="box cue" data-cue="browser" data-at="0.4" style="left:110px; top:250px; width:360px;">
+    <div class="k">Browser</div>
+    <h3>React UI</h3>
+    <ul><li>repo, harness, model</li><li>live steps over SSE</li><li>diff &amp; summary review</li></ul>
+  </div>
+
+  <div class="arrow cue" data-cue="backend" data-at="2" style="left:490px; top:420px; width:120px;"><span class="head"></span></div>
+
+  <div class="box cue" data-cue="backend" data-at="2" style="left:630px; top:200px; width:520px;">
+    <div class="k">OpenHarness server · Next.js</div>
+    <h3>Auth, sessions, repos</h3>
+    <ul><li>GitHub OAuth &amp; repo access</li><li>harness key → harness_id (server-side)</li><li>keeps reading after you close the tab</li><li>saves response &amp; session ids per user</li></ul>
+  </div>
+
+  <div class="arrow cue" data-cue="api" data-at="5" style="left:1170px; top:420px; width:110px;"><span class="head"></span></div>
+
+  <div class="box cue" data-cue="api" data-at="5" style="left:1300px; top:150px; width:510px;">
+    <div class="k">HarnessRouter</div>
+    <h3>Responses API</h3>
+    <div class="code mono"><span class="key">POST</span> /v1/responses<br>{ <span class="key">input</span>: <span class="s">"Add once()…"</span>,<br>&nbsp;&nbsp;<span class="key">model</span>: <span class="s">"qwen3.8-max"</span>,<br>&nbsp;&nbsp;<span class="key">metadata</span>: { harness_id },<br>&nbsp;&nbsp;<span class="key">stream</span>: true }</div>
+    <div class="hgrid cue" data-cue="bases" data-at="7.5">
+      <div class="h"><span class="badge" style="width:26px;height:26px;font-size:10px;color:#D97757;background:color-mix(in oklab,#D97757 16%,#0d0f14)">CC</span>Claude Code</div>
+      <div class="h"><span class="badge" style="width:26px;height:26px;font-size:10px;color:#10A37F;background:color-mix(in oklab,#10A37F 16%,#0d0f14)">CX</span>Codex</div>
+      <div class="h"><span class="badge" style="width:26px;height:26px;font-size:10px;color:#7C6CF6;background:color-mix(in oklab,#7C6CF6 16%,#0d0f14)">QW</span>Qwen Code</div>
+      <div class="h"><span class="badge" style="width:26px;height:26px;font-size:10px;color:#F43F5E;background:color-mix(in oklab,#F43F5E 16%,#0d0f14)">MM</span>MiniMax Code</div>
+      <div class="h"><span class="badge" style="width:26px;height:26px;font-size:10px;color:#4C8DF6;background:color-mix(in oklab,#4C8DF6 16%,#0d0f14)">GE</span>Gemini CLI</div>
+      <div class="h"><span class="badge" style="width:26px;height:26px;font-size:10px;color:#CBD5E1;background:color-mix(in oklab,#CBD5E1 16%,#0d0f14)">OC</span>OpenCode <span style="color:var(--dim)">+4</span></div>
+    </div>
+  </div>
+
+  <div class="lock">
+    <div class="pill cue" data-cue="keys" data-at="10">🔒 HR_API_KEY stays on the server</div>
+    <div class="pill cue" data-cue="keys" data-at="10">harness_id never reaches the browser</div>
+    <div class="pill cue" data-cue="keys2" data-at="11">one harness per agent base · model per task</div>
+  </div>
+</div>
+<script src="cues.js"></script>
+</body></html>

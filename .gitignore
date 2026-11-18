@@ -1,0 +1,22 @@
+# secrets — never commit
+.env*
+!.env.example
+*.key
+
+# deps / build
+node_modules/
+.next/
+out/
+dist/
+coverage/
+*.tsbuildinfo
+next-env.d.ts
+
+# local data
+.data*/
+demo/build/
+demo/node_modules/
+
+# misc
+.DS_Store
+*.log

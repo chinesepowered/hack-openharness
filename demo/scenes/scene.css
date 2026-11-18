@@ -1,0 +1,17 @@
+:root {
+  --bg: #08090c; --panel: #0f1116; --panel2: #14171e; --raised: #1a1e27; --line: #222734; --line2: #2d3342;
+  --text: #e8eaf0; --mute: #9198a8; --dim: #5f6676; --brand: #8b7cff; --brand2: #38d0ff; --ok: #3fd68f; --bad: #ff6b7a;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--bg); color: var(--text); font-family: 'Inter', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+.stage { position: relative; width: 1920px; height: 1080px; overflow: hidden; }
+.grid { position: absolute; inset: 0; background-image: linear-gradient(to right, rgba(255,255,255,.035) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,.035) 1px, transparent 1px); background-size: 60px 60px; mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%); }
+.glow { position: absolute; left: 50%; top: 42%; width: 1300px; height: 760px; transform: translate(-50%, -50%); border-radius: 50%; background: rgba(111, 92, 255, .16); filter: blur(140px); }
+.brand-text { background: linear-gradient(92deg, #b4a9ff 0%, #8b7cff 35%, #38d0ff 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.mono { font-family: 'JetBrains Mono', 'DejaVu Sans Mono', ui-monospace, monospace; }
+.cue { opacity: 0; transform: translateY(14px) scale(.98); transition: opacity .55s cubic-bezier(.2,.7,.2,1), transform .55s cubic-bezier(.2,.7,.2,1); }
+.cue.on { opacity: 1; transform: none; }
+.fade { opacity: 0; transition: opacity .6s ease; } .fade.on { opacity: 1; }
+.badge { display: inline-grid; place-items: center; border-radius: 28%; font-family: 'JetBrains Mono', 'DejaVu Sans Mono', monospace; font-weight: 700; }
+.logo { display: inline-flex; align-items: center; gap: 18px; font-weight: 600; letter-spacing: -0.02em; }
+.chip { display: inline-flex; align-items: center; gap: 12px; border: 1px solid var(--line2); background: var(--panel2); border-radius: 18px; padding: 18px 30px; font-size: 44px; font-weight: 600; }

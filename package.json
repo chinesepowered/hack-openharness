@@ -1,0 +1,36 @@
+{
+  "name": "openharness",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A web coding agent where you pick the harness AND the model. Built on HarnessRouter.",
+  "scripts": {
+    "dev": "next dev -p 3000",
+    "build": "next build",
+    "start": "next start -p 3000",
+    "typecheck": "tsc --noEmit",
+    "test": "node --test --experimental-strip-types tests/*.test.ts",
+    "hr:me": "node scripts/hr-admin.mjs me",
+    "hr:ensure": "node scripts/hr-admin.mjs ensure",
+    "hr:sync": "node scripts/hr-admin.mjs sync",
+    "hr:smoke": "node scripts/hr-smoke.mjs"
+  },
+  "engines": { "node": ">=22.18" },
+  "dependencies": {
+    "lucide-react": "1.75.0",
+    "next": "16.4.6",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "react-markdown": "10.1.0",
+    "remark-gfm": "4.0.1",
+    "server-only": "0.0.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "4.3.5",
+    "@types/node": "22.20.5",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "postcss": "8.5.33",
+    "tailwindcss": "4.3.5",
+    "typescript": "5.9.3"
+  }
+}
