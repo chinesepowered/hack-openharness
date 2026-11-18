@@ -8,7 +8,7 @@ export const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 export const BUILD = join(ROOT, 'demo', 'build');
 export const AUDIO = join(BUILD, 'audio');
 export const LEAD = 0.35; // silence before narration in each segment
-export const TAIL = 0.5; // silence after
+export const TAIL = 0.35; // silence after
 
 export function narration() { return JSON.parse(readFileSync(join(ROOT, 'demo', 'narration.json'), 'utf8')); }
 

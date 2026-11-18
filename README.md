@@ -1,14 +1,29 @@
 # OpenHarness
 
-**One coding agent. Every harness.**
+**One coding agent. Every harness.** Any harness, any model, your choice.
 
-OpenCode made the *model* swappable. OpenHarness makes the *harness* swappable too. It's a web coding agent (think Claude Code on the web) where you pick the **agent harness** as well as the model: Claude Code, Codex, Qwen Code, MiniMax Code, Gemini CLI, OpenCode, Kimi Code, Grok Build, Aider and OpenHands. Point it at a GitHub repo, describe a task, watch the harness work live, review the diff, follow up, or **race several harnesses on the same task**.
+OpenCode made the *model* swappable. OpenHarness makes the *harness* swappable too. It's a web coding agent (think Claude Code on the web) where you pick the **agent harness** as well as the model: Claude Code, Codex, Qwen Code, MiniMax Code, Gemini CLI, OpenCode, Kimi Code, Grok Build, Aider and OpenHands. Point it at a GitHub repo, describe a task, watch the harness work live, review the diff, follow up, or **run several harnesses side by side on the same task**.
 
 Built for the HarnessRouter hackathon. [HarnessRouter](https://harnessrouter.ai) runs every agent; OpenHarness owns the product: sign-in, repos, sessions, the live UI and the review flow.
 
-🎬 **Demo video:** [`demo/openharness-demo.mp4`](demo/openharness-demo.mp4) (3 min)
+🎬 **Demo video:** [`demo/openharness-demo.mp4`](demo/openharness-demo.mp4) (2:59)
 
 ![The composer: repo, harness, model, task](docs/composer.jpg)
+
+## Why: it's about options
+
+A coding agent is a model *plus* a harness: the tools, system prompt and agent loop that turn the model into an engineer. Developers pick harnesses and models for all kinds of reasons:
+
+* **Preference.** People have favorite harnesses and the workflows they're used to.
+* **Quirks.** Each harness has its own strengths, tools and habits, and some fit a codebase or a task better than others.
+* **Speed and cost.** Sometimes you want a fast, cheap pass; sometimes you want the thorough one.
+* **The model.** Most harnesses can run dozens of models from different providers.
+
+Today, each harness is a separate install, login and terminal. OpenHarness puts all of them, and every model they support, behind one UI on your repos, so the choice is yours, task by task.
+
+A real example from the demo: on the same task, **Codex on `gpt-6-luna`** finished in 4m 48s for $0.03 but couldn't run mitt's legacy test suite. **Qwen Code on `qwen3.8-max`** took 12m 44s and $0.90, worked around the broken runner and got all 28 tests passing. Neither is "right". It depends on what you want, and now you can choose.
+
+![Two harnesses on the same task, side by side](docs/race.jpg)
 
 ## What you can do
 
@@ -18,7 +33,7 @@ Built for the HarnessRouter hackathon. [HarnessRouter](https://harnessrouter.ai)
 | **Watch it work** | Every command, edit and note the harness makes streams into the session as it happens. |
 | **Review, not trust** | Each task ends with a reviewable result: title, summary, test status, a full diff viewer, `SUMMARY.md` and a downloadable `changes.patch`, plus time and real cost. |
 | **Follow up** | Messages continue the same HarnessRouter session (`previous_response_id`), so the harness keeps its full context. You can switch models mid-session; the harness stays fixed. |
-| **Race harnesses** | Send one task to 2–4 harnesses at once and compare time, cost, tests and diffs side by side, with *Fastest* and *Cheapest* badges. Continue with the winner. |
+| **Side by side ("race")** | Send one task to 2–4 harnesses at once and compare time, cost, tests and diffs side by side, with *Fastest* and *Cheapest* badges. Continue with whichever you prefer. |
 | **Sessions** | Every session (and its HarnessRouter response/session ids) is stored with your account, so you can come back to it. |
 
 ![A finished session: result card and diff](docs/result.jpg)

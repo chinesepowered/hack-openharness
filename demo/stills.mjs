@@ -9,9 +9,9 @@ mkdirSync(OUT, { recursive: true });
 // [take, mark, seconds relative to the mark, output name]
 const SHOTS = [
   ['A', 'live', -1.2, 'composer.jpg'],
-  ['A', 'followup', -0.5, 'result.jpg'],
+  ['A', 'result', 5.0, 'result.jpg'],
   ['B', 'end', -0.5, 'race.jpg'],
-  ['A', 'result', -1.0, 'session.jpg'],
+  ['A', 'live', 300, 'session.jpg'],
 ];
 for (const [take, mark, off, name] of SHOTS) {
   const d = JSON.parse(readFileSync(join(BUILD, 'takes', take, 'frames.json'), 'utf8'));

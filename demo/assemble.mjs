@@ -24,17 +24,17 @@ const EDL = [
   { id: '05-live', parts: [{ take: 'A', from: 'live', to: 'result', fill: true, badge: true }] },
   { id: '06-result', parts: [{ take: 'A', from: 'result', to: 'followup', fill: true }] },
   { id: '06b-followup', parts: [
-    { take: 'A', from: 'followup', to: 'followup-live', speed: 1.6 },
-    { take: 'A', from: 'followup-live', to: 'followup-result', fill: true, badge: true },
-    { take: 'A', from: 'followup-result', to: 'end', speed: 1.4 },
+    { take: 'A', from: 'followup', to: 'followup-live', speed: 2.2 },
+    { take: 'A', from: 'followup-live', to: 'followup-result', fill: true, badge: true, minFill: 3.5 },
+    { take: 'A', from: 'followup-result', to: 'end', speed: 1.8 },
   ] },
-  { id: '07-race', parts: [
-    { take: 'B', from: 'race-compose', to: 'race-live', speed: 1.9 },
-    { take: 'B', from: 'race-live', to: 'race-result', fill: true, badge: true },
+  { id: '07-race', parts: [{ take: 'B', from: 'race-compose', to: 'race-live', fill: true }] },
+  { id: '07b-race-result', parts: [
+    { take: 'B', from: 'race-live', to: 'race-result', fill: true, badge: true, minFill: 5 },
     { take: 'B', from: 'race-result', to: 'end', speed: 1.5 },
   ] },
   { id: '08-arch', parts: [{ take: 'card-08-arch', from: 'start', to: 'end', speed: 1 }] },
-  { id: '09-close', parts: [{ take: 'card-09-close', from: 'start', to: 'end', speed: 1 }] },
+  { id: '09-close', parts: [{ take: 'card-09-close', from: 'start', to: 'end', speed: 1, endOffset: -1.2 }] },
 ];
 
 const takes = {};
@@ -89,15 +89,24 @@ async function renderBadges(speeds) {
 // ── plan ────────────────────────────────────────────────────────────────────────────────────────
 const plan = [];
 for (const seg of EDL) {
-  const D = LEAD + audioDuration(seg.id) + TAIL + (seg.hold || 0);
+  const missing = seg.parts.map((p) => p.take).filter((n) => !existsSync(join(BUILD, 'takes', n, 'frames.json')));
+  if (missing.length || !existsSync(join(AUDIO, `${seg.id}.mp3`))) {
+    if (!process.env.PREVIEW) throw new Error(`${seg.id}: missing ${missing.length ? 'take ' + missing.join(',') : 'narration'}`);
+    console.log('PREVIEW: skipping', seg.id);
+    continue;
+  }
+  let D = LEAD + audioDuration(seg.id) + TAIL + (seg.hold || 0);
   const parts = seg.parts.map((p) => {
     const t = take(p.take);
     const from = markTime(t, p.from);
-    const to = markTime(t, p.to);
+    const to = markTime(t, p.to) + (p.endOffset || 0);
     return { ...p, raw: to - from, fromT: from, toT: to };
   });
   const fixed = parts.filter((p) => !p.fill).reduce((a, p) => a + p.raw / p.speed, 0);
   const fills = parts.filter((p) => p.fill);
+  // a time-lapsed part always gets at least `minFill` seconds on screen (the segment grows if needed)
+  const minFill = fills.reduce((a, p) => a + Math.min(p.raw, p.minFill || 0), 0);
+  if (D - fixed < minFill) D = fixed + minFill;
   const left = Math.max(0, D - fixed);
   const fillRaw = fills.reduce((a, p) => a + p.raw, 0);
   for (const p of parts) {
@@ -213,7 +222,7 @@ const alist = join(OUT, 'audio.txt');
 writeFileSync(alist, segFiles.map((s) => `file '${s.audio}'`).join('\n') + '\n');
 ff(['-f', 'concat', '-safe', '0', '-i', alist, '-af', 'loudnorm=I=-16:TP=-1.5:LRA=11', '-ar', '48000', join(OUT, 'narration.wav')]);
 const vf = process.env.NOCAPTIONS ? 'null' : `subtitles=${join(OUT, 'captions.ass')}:fontsdir=/usr/share/fonts/opentype/inter`;
-const final = join(BUILD, 'openharness-demo.mp4');
+const final = join(BUILD, process.env.PREVIEW ? 'preview.mp4' : 'openharness-demo.mp4');
 ff(['-f', 'concat', '-safe', '0', '-i', vlist, '-i', join(OUT, 'narration.wav'), '-vf', vf, '-map', '0:v', '-map', '1:a',
   '-c:v', 'libx264', '-preset', 'slow', '-crf', '21', '-pix_fmt', 'yuv420p', '-r', String(FPS), '-c:a', 'aac', '-b:a', '192k', '-movflags', '+faststart', '-shortest', final]);
 console.log('wrote', final, probeDuration(final).toFixed(2), 's');

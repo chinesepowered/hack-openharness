@@ -19,14 +19,14 @@ const CARDS = {
   }, 0.4],
   '02-problem': ['problem.html', {
     h0: ['Claude Code', 0, 0], h1: ['Codex', 0, 0], h2: ['Qwen Code', 0, 0], h3: ['MiniMax', 0, 0], h4: ['Gemini CLI', 0, 0],
-    install: ['separate install', 0, 0.3], login: ['separate login', 0, 0.3], more: ['way of working', 0, 0.2], count: ['babysitting', 0, 0.2],
+    install: ['separate install', 0, 0.3], login: ['separate login', 0, 0.3], more: ['own fans', 0, 0.2], count: ['babysit', 0, 0.1],
   }, 0.8],
   '08-arch': ['arch.html', {
     browser: ['Under the hood', 0, 0.2], backend: ['Next.js', 0, 0], api: ['Responses API', 0, 0], bases: ['one harness per', 0, 0],
     keys: ['API keys', 0, 0], keys2: ['API keys', 0, 1.2],
   }, 0.8],
   '09-close': ['close.html', {
-    name: ['OpenHarness', 0, -0.1], t1: ['Any harness', 0, 0], t2: ['Any model', 0, 0], t3: ['Your repo', 0, 0], meta: ['Your repo', 0, 0.9],
+    name: ['OpenHarness', 0, -0.1], t1: ['Any harness', 0, 0], t2: ['Any model', 0, 0], t3: ['Your choice', 0, 0], meta: ['Your choice', 0, 0.9],
   }, 2.6],
 };
 

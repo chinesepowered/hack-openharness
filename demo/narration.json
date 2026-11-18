@@ -1,5 +1,9 @@
 {
-  "voice": { "name": "Jessica", "voice_id": "cgSgspJ2msm6clMCkdW9", "model_id": "eleven_v4" },
+  "voice": {
+    "name": "Jessica",
+    "voice_id": "cgSgspJ2msm6clMCkdW9",
+    "model_id": "eleven_v4"
+  },
   "scenes": [
     {
       "id": "01-hook",
@@ -9,12 +13,12 @@
     {
       "id": "02-problem",
       "visual": "Harness terminals appear one by one",
-      "text": "Claude Code. Codex. Qwen Code. MiniMax. Gemini CLI. Each one is a separate install, a separate login, a separate way of working. Comparing them on your own code means babysitting a terminal for every one."
+      "text": "Claude Code. Codex. Qwen Code. MiniMax. Gemini CLI. Each has its own strengths, its own quirks, and its own fans. And each one is a separate install, a separate login, a separate terminal to babysit."
     },
     {
       "id": "03-solution",
       "visual": "OpenHarness landing page",
-      "text": "So we built OpenHarness. Think of it as OpenCode, but for harnesses: a web coding agent where you choose the harness and the model. Ten harnesses, more than sixty models, one place, all powered by HarnessRouter."
+      "text": "So we built OpenHarness. Think of it as OpenCode, but for harnesses: one web coding agent where you pick the harness and the model, for whatever reason matters to you. Ten harnesses, more than sixty models, powered by HarnessRouter."
     },
     {
       "id": "04-compose",
@@ -24,32 +28,37 @@
     {
       "id": "05-live",
       "visual": "Session view streaming live steps (sped up)",
-      "text": "OpenHarness streams the harness's work as it happens: every command, every edit. The agent runs in an isolated HarnessRouter sandbox. It clones the repo, reads the code, runs the existing tests, writes the change, and checks its own work."
+      "text": "OpenHarness streams the harness's work as it happens: every command, every edit. The agent runs in an isolated HarnessRouter sandbox. It clones the repo, reads the code, runs the existing tests, writes the change, and checks its own work. This run took seventeen minutes, so we've sped it up."
     },
     {
       "id": "06-result",
       "visual": "Result card, tests passed, diff viewer, summary",
-      "text": "When it's done, you get something you can review: a summary, the test status, the full diff, and exactly what it cost."
+      "text": "When it's done, you get something you can review: a summary, the test status, the full diff, and exactly what it cost. Qwen Code added the method with ten new tests, all passing, plus README docs, for about a dollar twenty."
     },
     {
       "id": "06b-followup",
       "visual": "Follow-up question in the same session",
-      "text": "Questions about the change? Just follow up in the same session. The harness keeps its full context, so it can explain exactly how its code behaves."
+      "text": "Questions about the change? Just follow up in the same session. The harness keeps its full context, so it can explain exactly how its code behaves, like why a handler that emits its own event still fires only once."
     },
     {
       "id": "07-race",
-      "visual": "Race: Qwen Code on qwen3.8-max vs Codex on gpt-6-luna",
-      "text": "And because every harness is one click away, you can race them. Send the same task to Qwen Code and to Codex running GPT-6 Luna, side by side. Compare time, cost, tests and diffs, then keep the patch you like best."
+      "visual": "Race setup: Qwen Code on qwen3.8-max vs Codex on gpt-6-luna",
+      "text": "And with every harness one click away, you can even run them side by side. Same task: Qwen Code on Qwen 3.8 Max, and Codex running GPT-6 Luna."
+    },
+    {
+      "id": "07b-race-result",
+      "visual": "Race live (sped up) and results with Fastest/Cheapest badges",
+      "text": "Codex finished in under five minutes for three cents, but couldn't run the project's old test suite. Qwen Code took longer, worked around it, and got all twenty-eight tests passing. Speed, cost, thoroughness, or just the harness you like working with: the choice is yours, task by task."
     },
     {
       "id": "08-arch",
       "visual": "Architecture diagram",
-      "text": "Under the hood, our Next.js backend owns sign-in, sessions and repo access. It calls HarnessRouter's Responses API, with one harness per agent base and the model chosen per task. The server keeps reading the stream even if you close the tab, and API keys and harness IDs never reach the browser."
+      "text": "Under the hood, our Next.js backend owns sign-in, sessions and repo access. It calls HarnessRouter's Responses API, with one harness per agent base and the model chosen per task. API keys and harness IDs never reach the browser."
     },
     {
       "id": "09-close",
       "visual": "Closing card",
-      "text": "OpenHarness. Any harness. Any model. Your repo."
+      "text": "OpenHarness. Any harness. Any model. Your choice."
     }
   ]
 }

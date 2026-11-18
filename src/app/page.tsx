@@ -52,6 +52,7 @@ export default async function Landing({ searchParams }: { searchParams: Promise<
             <p className="mt-6 max-w-xl text-[17px] leading-relaxed text-mute">
               OpenCode made the <em className="text-text not-italic">model</em> swappable. OpenHarness makes the <em className="text-text not-italic">harness</em> swappable too.
               Run Claude Code, Codex, Qwen Code, MiniMax, Gemini CLI, OpenCode and more on your GitHub repos, with any model each one supports, from one web app.
+              Pick whatever fits: your favorite, a harness&apos;s strengths and quirks, speed or cost.
             </p>
             <div className="mt-9">
               <SignInButtons githubOAuth={oauth} signedIn={Boolean(user)} />
@@ -86,7 +87,7 @@ export default async function Landing({ searchParams }: { searchParams: Promise<
         <section className="grid gap-4 pb-20 md:grid-cols-3">
           {[
             { icon: Layers, title: 'Harness and model, your call', body: 'Every harness brings its own tools, system prompt and agent loop. Pair it with models from OpenAI, Anthropic, Google, Qwen, DeepSeek, Moonshot and more.' },
-            { icon: Columns3, title: 'Race them head-to-head', body: 'Send one task to up to four harnesses at once, then compare time, cost, tests and diffs side by side. Keep the winner and keep iterating.' },
+            { icon: Columns3, title: 'Compare them side by side', body: 'Every harness has its own strengths and quirks. Send one task to up to four at once, compare time, cost, tests and diffs, and keep going with the one you like.' },
             { icon: ShieldCheck, title: 'Safe by design', body: 'Agents work in isolated HarnessRouter sandboxes and hand back a patch for you to review. API keys and harness ids never reach the browser.' },
           ].map(({ icon: Icon, title, body }) => (
             <div key={title} className="rounded-2xl border border-line bg-panel/70 p-6">

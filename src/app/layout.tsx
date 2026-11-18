@@ -6,7 +6,7 @@ const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'sw
 const mono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-jetbrains', display: 'swap' });
 
 export const metadata: Metadata = {
-  title: 'OpenHarness: any harness, any model, your repo',
+  title: 'OpenHarness: any harness, any model, your choice',
   description: 'A web coding agent where you pick the harness (Claude Code, Codex, Qwen Code, MiniMax, Gemini CLI, OpenCode…) and the model. Built on HarnessRouter.',
 };
 
