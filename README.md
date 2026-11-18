@@ -1,64 +1,42 @@
 # OpenHarness
 
-**One coding agent. Every harness.** Any harness, any model, your choice.
+**Every coding agent. Any model. One platform.**
 
-OpenCode made the *model* swappable. OpenHarness makes the *harness* swappable too. It's a web coding agent (think Claude Code on the web) where you pick the **agent harness** as well as the model: Claude Code, Codex, Qwen Code, MiniMax Code, Gemini CLI, OpenCode, Kimi Code, Grok Build, Aider and OpenHands. Point it at a GitHub repo, describe a task, watch the harness work live, review the diff, follow up, or **run several harnesses side by side on the same task**.
+**OpenHarness is a harness- and model-agnostic coding platform: think Devin or Claude Code on the web, except you choose the agent.** Today AI coding agents are silos. Claude Code, Codex, Qwen Code, Gemini CLI and the rest are each a separate install, login and bill, each tied to one vendor's models, and none of them is the best or cheapest choice for every task. OpenHarness puts **10 agent harnesses and 65 models behind one web app**: connect a repo, pick the harness and the model (or run several side by side), watch the agent work live, and review a real diff with its test results and exact cost. Every task runs on **HarnessRouter**, which gives us sandboxed execution of every harness through one API, so a two-person hackathon team could ship a multi-agent coding platform.
 
-Built for the HarnessRouter hackathon. [HarnessRouter](https://harnessrouter.ai) runs every agent; OpenHarness owns the product: sign-in, repos, sessions, the live UI and the review flow.
+🎬 **[Watch the 2:59 demo](demo/openharness-demo.mp4).** Everything in it is the real app running real tasks: real repos, real diffs, real costs.
 
-🎬 **Demo video:** [`demo/openharness-demo.mp4`](demo/openharness-demo.mp4) (2:59)
+![Two agents, same task, side by side: Codex on gpt-6-luna vs Qwen Code on qwen3.8-max](docs/race.jpg)
 
-![The composer: repo, harness, model, task](docs/composer.jpg)
+## The pitch in numbers
 
-## Why: it's about options
-
-A coding agent is a model *plus* a harness: the tools, system prompt and agent loop that turn the model into an engineer. Developers pick harnesses and models for all kinds of reasons:
-
-* **Preference.** People have favorite harnesses and the workflows they're used to.
-* **Quirks.** Each harness has its own strengths, tools and habits, and some fit a codebase or a task better than others.
-* **Speed and cost.** Sometimes you want a fast, cheap pass; sometimes you want the thorough one.
-* **The model.** Most harnesses can run dozens of models from different providers.
-
-Today, each harness is a separate install, login and terminal. OpenHarness puts all of them, and every model they support, behind one UI on your repos, so the choice is yours, task by task.
-
-A real example from the demo: on the same task, **Codex on `gpt-6-luna`** finished in 4m 48s for $0.03 but couldn't run mitt's legacy test suite. **Qwen Code on `qwen3.8-max`** took 12m 44s and $0.90, worked around the broken runner and got all 28 tests passing. Neither is "right". It depends on what you want, and now you can choose.
-
-![Two harnesses on the same task, side by side](docs/race.jpg)
-
-## What you can do
+All from real runs in the demo, on the open-source [`developit/mitt`](https://github.com/developit/mitt) repo:
 
 | | |
 |---|---|
-| **Pick harness × model** | 10 harnesses, 65 distinct models, 453 harness × model combinations, read live from HarnessRouter. Run Qwen Code on `qwen3.8-max`, Codex on `gpt-6-luna`, or Qwen Code on Claude, all from one picker. |
-| **Watch it work** | Every command, edit and note the harness makes streams into the session as it happens. |
-| **Review, not trust** | Each task ends with a reviewable result: title, summary, test status, a full diff viewer, `SUMMARY.md` and a downloadable `changes.patch`, plus time and real cost. |
-| **Follow up** | Messages continue the same HarnessRouter session (`previous_response_id`), so the harness keeps its full context. You can switch models mid-session; the harness stays fixed. |
-| **Side by side ("race")** | Send one task to 2–4 harnesses at once and compare time, cost, tests and diffs side by side, with *Fastest* and *Cheapest* badges. Continue with whichever you prefer. |
-| **Sessions** | Every session (and its HarnessRouter response/session ids) is stored with your account, so you can come back to it. |
+| **Choice** | 10 harnesses × 65 models = **453 agent combinations**, read live from HarnessRouter |
+| **Cost** | Same task, two agents: **Codex + `gpt-6-luna`: $0.03, 4m 48s** vs **Qwen Code + `qwen3.8-max`: $0.90, 12m 44s, all 28 tests passing**. That's a **27× price spread**: route routine work to cheap agents and save premium ones for the hard problems. |
+| **Quality** | Qwen Code + `qwen3.8-max` added `once()` to mitt with **10 new tests, all passing**, plus docs, for $1.20. A follow-up question was answered from the same session's context in 63 s for $0.15. |
+| **Breadth** | **All 10 harnesses verified** on real tasks (37–57 s, $0.01–$0.13 each for a code question) |
+| **Integration** | **One API** for all of it: HarnessRouter's Responses API |
 
-![A finished session: result card and diff](docs/result.jpg)
+## Sponsors used
 
-## How it works
+| Sponsor | Role in OpenHarness | HarnessRouter APIs used |
+|---|---|---|
+| **HarnessRouter** | The entire agent runtime: every task, on every harness and model, runs on HarnessRouter Cloud | Harnesses (create, reuse by name, ETag/If-Match updates) · Responses (streaming, per-task model, follow-ups, idempotency, cancel, recovery by polling) · Sessions & container files · Catalog (`/v1/bases`, `/v1/harnesses/{id}/models`) · File uploads · UHP discovery |
 
-```
-Browser (React)                 OpenHarness server (Next.js, Node)                 HarnessRouter Cloud
-───────────────                 ─────────────────────────────────                 ───────────────────
-pick repo / harness / model ──► auth · tenancy checks · repo access          ──► POST /v1/responses  (stream: true)
-live steps (SSE)            ◄── harness key → harness_id (server-only)            input, user, model,
-diff / summary / download   ◄── consumes the stream even if the tab closes        metadata.harness_id
-                                saves response.id + session_id per user       ◄── SSE events
-                                reads out/changes.patch, manifest, SUMMARY    ◄── GET /v1/sessions/{id}/files
-                                recovers running tasks after a restart        ◄── GET /v1/responses/{id}
-```
+<sub>Not a sponsor, just tooling: the demo's voiceover was made with ElevenLabs.</sub>
 
-* **One HarnessRouter harness per agent base.** A harness's `base` is fixed at creation, but its `model` can be overridden per task, so OpenHarness owns ten harnesses (`OpenHarness · Claude Code`, `OpenHarness · Codex`, …) that share one set of instructions, and sends the user's model choice as `model` on each task. The live config is in [`harnessrouter.json`](harnessrouter.json); the source of truth is [`harness/`](harness/).
-* **The browser never sees HarnessRouter.** It sends a harness *key* (`"qwen"`), a model, a repo and a prompt. The server maps the key to the `harness_id`, validates the model against the harness's live model list, and calls HarnessRouter with `HR_API_KEY` from its own environment. Harness ids, session ids, response ids, download URLs and raw upstream errors never reach the browser.
-* **One user request = one task.** A new session sends `input` + `user` + `metadata.harness_id`. A follow-up adds `previous_response_id` and `metadata.session_id` from the stored record, always on the harness the session started on.
-* **Streams are consumed server-side**, independent of the browser connection, and turned into small sanitized "steps" (`Run npm test`, `Edit src/index.ts`) that are fanned out to the browser over Server-Sent Events. If the server restarts mid-task, recovery polls `GET /v1/responses/{id}` and never re-sends the task.
-* **The output contract** (in the harness instructions) makes every harness hand back the same artifacts: `out/changes.patch` (cumulative diff against the starting commit), `out/SUMMARY.md` and `out/manifest.json` (title, summary, changed files, test status). The server downloads them with the key and serves them through owner-checked routes.
-* **Repos:** public repos are cloned by the agent inside its sandbox. For private repos (GitHub sign-in), the server downloads the tarball with the user's token and uploads it to HarnessRouter as an input file, so the agent never sees a GitHub token.
+## HarnessRouter, in detail
 
-### The harnesses
+### Why it's the foundation
+
+Without HarnessRouter, a multi-agent coding platform means hosting and sandboxing ten different agent CLIs, keeping up with their releases, managing keys and billing for a dozen model providers, and normalizing ten different tool vocabularies and output formats. With HarnessRouter it is one `POST /v1/responses` with a `harness_id` and a `model`. **When the next great harness ships, adding it is a config entry for us and zero work for our users.**
+
+### 1. Harnesses: one per agent base
+
+A harness's `base` is fixed, but its model can be chosen per task. So OpenHarness owns **ten HarnessRouter harnesses**, one per agent base, all sharing one set of standing instructions ([`harness/instructions.md`](harness/instructions.md)). Every task then sends the user's model choice.
 
 | Harness | Base | Default model | Harness ID |
 |---|---|---|---|
@@ -73,69 +51,147 @@ diff / summary / download   ◄── consumes the stream even if the tab closes
 | OpenHarness · Aider | `aider` | `gpt-6.1-sol` | `chrn_99cee88d96ac4e7e8353c3f2f4b8ec33` |
 | OpenHarness · OpenHands | `openhands` | `gpt-5.4` | `chrn_f2da6c4bd2ab45e3b707e699fe6f1994` |
 
-Budgets per task: 250 steps, 50 minutes, $3.
+* **One output contract for every harness.** The instructions make every agent hand back the same artifacts: `out/changes.patch` (the cumulative diff against the starting commit), `out/SUMMARY.md` and `out/manifest.json` (title, summary, changed files, test status). That's what makes ten very different agents comparable side by side.
+* **Managed as code.** [`harness/setups.json`](harness/setups.json) is the source of truth. `npm run hr:ensure` reuses harnesses by exact name or creates them. `npm run hr:sync` fetches each live harness with its ETag, applies a full `PUT` with `If-Match`, retries on `412` and reads it back. The live copy is [`harnessrouter.json`](harnessrouter.json).
+* **Budgets per task:** 250 steps, 50 minutes, $3.
 
-## Run it
+### 2. Responses API: every task
 
-Requires Node 22.18+.
+```jsonc
+// POST https://api.harnessrouter.ai/v1/responses   (server-side, Authorization: Bearer $HR_API_KEY)
+{
+  "input": "Repository: https://github.com/developit/mitt.git\nBranch: main\n\nTask:\nAdd a once() method…",
+  "user": "u_…",                          // the signed-in OpenHarness user, set by the server
+  "model": "qwen3.8-max",                  // the user's model choice, validated per harness
+  "metadata": { "harness_id": "chrn_…" },  // mapped server-side from the harness the user picked
+  "stream": true
+}
+```
+
+* **Streaming.** The server consumes the SSE stream and turns tool calls into small sanitized steps (`Run npm test`, `Edit src/index.ts`) that it fans out to the browser. The stream is read to the end even if the user closes the tab.
+* **Durability.** `response.id` and `session_id` are saved at `response.created`. After a restart, the server polls `GET /v1/responses/{id}` and never re-sends the task. Each new task carries a fresh `Idempotency-Key`.
+* **Follow-ups.** These send `previous_response_id` plus `metadata.session_id`, always on the harness the session started on, so the agent keeps its full context. Users can switch models mid-session.
+* **Cancel:** `POST /v1/responses/{id}/cancel`.
+
+### 3. Sessions and files
+
+When a task ends, the server lists `GET /v1/sessions/{id}/files`, downloads the `out/` deliverables with the key, and turns them into the result card: diff viewer, `SUMMARY.md`, test status and a downloadable patch. The session's `spend_usd` becomes the **per-task cost shown to the user**. That's the number behind the cost story.
+
+### 4. Catalog
+
+`GET /v1/bases` and `GET /v1/harnesses/{id}/models` drive the live model menus: 60 models on Qwen Code, 63 on OpenCode, and so on. The server re-validates the chosen model against them on every task.
+
+### 5. File uploads
+
+For private repos (GitHub sign-in), the server downloads the tarball with the user's GitHub token and uploads it with `POST /v1/files` as an `input_file`, so **the agent never sees a GitHub token**. Public repos are cloned inside the sandbox.
+
+### 6. Security, by HarnessRouter's own rules
+
+* The HarnessRouter key lives only in the server environment.
+* `harness_id`s, session and response ids, download URLs and raw upstream errors never reach the browser. The browser only sends a harness *key* like `"qwen"`.
+* Every session, stream, download, follow-up and cancel route checks ownership. Cross-site POSTs are refused.
+* We verified that production build traces exclude `.env*` and user data.
+
+## Architecture
+
+```mermaid
+flowchart LR
+  subgraph B["Browser"]
+    UI["OpenHarness UI<br/>repo · harness · model · task<br/>live steps · diff review"]
+  end
+  subgraph S["OpenHarness server · Next.js"]
+    R["API routes<br/>auth · ownership · validation"]
+    M["Harness map<br/>'qwen' → harness_id"]
+    RUN["Runner<br/>reads every stream to the end"]
+    DB[("Users, sessions,<br/>response + session ids")]
+  end
+  subgraph H["HarnessRouter Cloud"]
+    RESP["Responses API"]
+    FILES["Sessions & Files API"]
+    subgraph X["Sandboxed harnesses"]
+      CC["Claude Code"]
+      CX["Codex"]
+      QW["Qwen Code"]
+      MORE["MiniMax · Gemini CLI · OpenCode<br/>Kimi · Grok · Aider · OpenHands"]
+    end
+  end
+  GH["GitHub"]
+  UI -- "JSON + SSE" --> R
+  R --> M --> RUN
+  RUN -- "POST /v1/responses · stream" --> RESP
+  RESP -. "SSE events" .-> RUN
+  RUN --> DB
+  RUN -- "patch · summary · manifest" --> FILES
+  RESP --> X
+  X -- "git clone" --> GH
+```
+
+One task, end to end:
+
+```mermaid
+sequenceDiagram
+  participant U as Developer
+  participant O as OpenHarness server
+  participant H as HarnessRouter
+  participant A as Harness sandbox
+  U->>O: new session {repo, harness "qwen", model, task}
+  O->>O: auth · "qwen" → harness_id · validate model
+  O->>H: POST /v1/responses {input, user, model, harness_id, stream}
+  H->>A: run Qwen Code on qwen3.8-max
+  A->>A: clone · read · test · edit · verify
+  H-->>O: SSE: created (ids saved) · tool calls · text
+  O-->>U: live steps
+  H-->>O: response.completed
+  O->>H: GET session files (patch, summary, manifest) + spend
+  O-->>U: result: diff · tests · cost
+  U->>O: follow-up
+  O->>H: POST /v1/responses {previous_response_id, session_id}
+```
+
+## Why it's a business
+
+* **Who pays:** developers and teams who already pay for several coding agents and still switch between them.
+* **What they get:** **options** (the right harness and model for each task, never locked in), **lower cost** (cheap agents for routine work, premium ones only when needed: a 27× spread on the same task in our demo) and **one platform** (one login, one bill, one review flow for every agent).
+* **How we make money:** pay-per-task credits with a margin on top of each HarnessRouter run, and team plans with spend budgets, harness and model policies, shared sessions, SSO and audit.
+* **The moat:** every task records time, cost and test outcomes per repo × harness × model. That data powers **Auto mode** (next): routing each task to the best harness and model for its budget, and per-codebase leaderboards no single-vendor agent can offer.
+* **Why HarnessRouter wins too:** every OpenHarness task is a HarnessRouter task. It's a consumer product that turns their API into end-user revenue, and it gets better every time HarnessRouter adds a harness.
+
+## What's built vs. next
+
+| Built and verified | Next |
+|---|---|
+| 10 harnesses × 65 models, live catalog | **Auto mode**: pick the harness and model per task and budget |
+| Live streaming sessions, follow-ups, mid-session model switch | Open the reviewed patch as a GitHub PR (GitHub App, issue → PR) |
+| Side-by-side runs with time, cost and test comparison | Billing (credits), team budgets and policies |
+| Diff review, `SUMMARY.md`, patch download | Per-repo leaderboards from recorded outcomes |
+| GitHub OAuth (needs an OAuth app; the demo runs in demo mode on public repos) | Postgres instead of the JSON store |
+| Crash recovery, tenancy checks, idempotency, cancel | |
+
+## Try it
 
 ```bash
 npm install
 ```
 
-Put your HarnessRouter key in the server environment as `HR_API_KEY`, or locally in a one-line, git-ignored `.env.harnessrouter` file (`HR_API_KEY=sk-hr-...`). Never commit it and never expose it to the browser.
+Put a HarnessRouter key in the server environment as `HR_API_KEY`, or in a one-line, git-ignored `.env.harnessrouter` file. Then:
 
 ```bash
 npm run dev
 ```
 
-Open http://localhost:3000 and click **Try the demo** (public repos, no GitHub needed).
-
-**GitHub sign-in (optional):** create a GitHub OAuth app with callback `<APP_URL>/api/auth/github/callback`, then set `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET` and `APP_URL` (see [`.env.example`](.env.example)). Users can then sign in with GitHub and pick from their own repos, private ones included.
-
-### Managing the harnesses
+Open http://localhost:3000 and click **Try the demo**. For GitHub sign-in, set `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET` and `APP_URL` (see [`.env.example`](.env.example)). To run the tests (adapter, stream parser, step builder, diff parser):
 
 ```bash
-npm run hr:me       # which HarnessRouter Workspace the key acts in
-npm run hr:ensure   # reuse-by-exact-name or create every harness in harness/setups.json → harnessrouter.json
-npm run hr:sync     # fetch live (ETag) → full PUT with If-Match → read back; for instruction/model changes
+npm test
 ```
 
-To change the instructions, edit [`harness/instructions.md`](harness/instructions.md) and run `npm run hr:sync`. It starts from the live record (which may have been edited in the HarnessRouter console), sends `If-Match`, refetches on `412`, and rewrites `harnessrouter.json`.
-
-### Tests
-
-```bash
-npm test        # stream parser, adapter (key/idempotency/user/model/follow-up/poll recovery), step builder, diff parser
-npm run build   # type-checks and builds
-```
-
-## Verified end to end
-
-Through the app's own routes, with real HarnessRouter tasks:
-
-* **Qwen Code + `qwen3.8-max` on `developit/mitt`:** "Add a `once()` method with tests and docs" completed with 4 files changed (+197 −3), 12 new tests, 31 passing, the patch/summary/manifest collected, and $1.47 of real spend.
-* **Crash recovery:** the dev server restarted mid-task. On the next request, the server found the running turn, polled `GET /v1/responses/{id}` to completion and collected the outputs without re-sending the task.
-* **Follow-up:** continued the same session with `previous_response_id` and the model switched to `qwen3.8-flash`. The harness answered from its earlier context in 20s.
-* **All ten harnesses run:** besides Qwen Code, Codex (`gpt-6-luna`, in the race) and Claude Code (`claude-haiku-5.5` probe), MiniMax Code, Gemini CLI, OpenCode, Kimi Code, Grok Build, Aider and OpenHands each completed a real task on their default models in 37–57 s for $0.01–$0.13.
-* **Tenancy:** a second user gets 404 on another user's session detail, stream, downloads, follow-ups and cancel, and their session list is empty. Cross-site POSTs are refused. Unknown models are refused.
-* **No leaks:** browser payloads contain no `chrn_`/`hsess`/`resp_` ids, download URLs or keys. Server build traces exclude `.env*` and `.data/`.
-
-## Hackathon scope
-
-* **Storage** is a JSON file (`.data/db.json`) behind a tiny repository layer. Swap in Postgres for multi-instance deploys.
-* **GitHub sign-in** is fully wired (OAuth, repo listing, private-repo tarballs) but needs an OAuth app. The demo runs in demo mode on public repos.
-* **Opening a pull request** from the reviewed patch is the obvious next step. The agent is told never to push; the server would apply `changes.patch` with the user's token.
-
-## Project layout
+## Repo map
 
 ```
-src/app/                 pages (landing, /app composer, /app/s/[id] session, /app/compare/[id] race) + API routes
-src/lib/server/          server-only: HarnessRouter adapter, runner (stream → steps → SSE), auth, GitHub, store
-src/lib/shared/          browser-safe types, harness metadata, diff parser
-src/components/          UI
-harness/                 harness instructions + setups (source of truth for hr:ensure / hr:sync)
-harnessrouter.json       live harness ids, names, bases, models, instructions (no secrets)
-scripts/                 hr-admin.mjs (harness admin), hr-smoke.mjs (one-off smoke test)
-demo/                    the demo video pipeline: narration (ElevenLabs), real recordings (Playwright), assembly (ffmpeg)
+src/app/            landing, /app (composer), /app/s/[id] (session), /app/compare/[id] (side by side), API routes
+src/lib/server/     HarnessRouter adapter, runner (stream → steps → SSE), catalog, auth, GitHub, store
+src/lib/shared/     browser-safe types, harness metadata, diff parser
+harness/            harness instructions + setups (source of truth for hr:ensure / hr:sync)
+scripts/            hr-admin.mjs (harness admin), hr-smoke.mjs (one-off smoke test)
+demo/               the video pipeline: narration, real-footage recorder, animated cards, ffmpeg assembly
 ```
