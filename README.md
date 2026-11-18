@@ -102,6 +102,7 @@ Through the app's own routes, with real HarnessRouter tasks:
 * **Qwen Code + `qwen3.8-max` on `developit/mitt`:** "Add a `once()` method with tests and docs" completed with 4 files changed (+197 −3), 12 new tests, 31 passing, the patch/summary/manifest collected, and $1.47 of real spend.
 * **Crash recovery:** the dev server restarted mid-task. On the next request, the server found the running turn, polled `GET /v1/responses/{id}` to completion and collected the outputs without re-sending the task.
 * **Follow-up:** continued the same session with `previous_response_id` and the model switched to `qwen3.8-flash`. The harness answered from its earlier context in 20s.
+* **All ten harnesses run:** besides Qwen Code, Codex (`gpt-6-luna`, in the race) and Claude Code (`claude-haiku-5.5` probe), MiniMax Code, Gemini CLI, OpenCode, Kimi Code, Grok Build, Aider and OpenHands each completed a real task on their default models in 37–57 s for $0.01–$0.13.
 * **Tenancy:** a second user gets 404 on another user's session detail, stream, downloads, follow-ups and cancel, and their session list is empty. Cross-site POSTs are refused. Unknown models are refused.
 * **No leaks:** browser payloads contain no `chrn_`/`hsess`/`resp_` ids, download URLs or keys. Server build traces exclude `.env*` and `.data/`.
 
