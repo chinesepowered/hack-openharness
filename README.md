@@ -4,9 +4,9 @@
 
 **OpenHarness is a harness- and model-agnostic coding platform: think Devin or Claude Code on the web, except you choose the agent.** Today AI coding agents are silos. Claude Code, Codex, Qwen Code, Gemini CLI and the rest are each a separate install, login and bill, each tied to one vendor's models, and none of them is the best or cheapest choice for every task. OpenHarness puts **10 agent harnesses and 65 models behind one web app**: connect a repo, pick the harness and the model (or run several side by side), watch the agent work live, and review a real diff with its test results and exact cost. Every task runs on **HarnessRouter**, which gives us sandboxed execution of every harness through one API, so a two-person hackathon team could ship a multi-agent coding platform.
 
-🎬 **[Watch the 2:53 demo](demo/openharness-demo.mp4).** Everything in it is the real app running real tasks: real repos, real diffs, real costs.
+🎬 **[Watch the 2:53 demo on YouTube](https://www.youtube.com/watch?v=vqSH4NsfjX4).** Everything in it is the real app running real tasks: real repos, real diffs, real costs. (Also in the repo: [`demo/openharness-demo.mp4`](demo/openharness-demo.mp4).)
 
-![Two agents, same task, side by side: Codex on gpt-6-luna vs Qwen Code on qwen3.8-max](docs/race.jpg)
+[![OpenHarness demo video: click to watch on YouTube](https://img.youtube.com/vi/vqSH4NsfjX4/maxresdefault.jpg)](https://www.youtube.com/watch?v=vqSH4NsfjX4)
 
 ## The pitch in numbers
 
@@ -20,6 +20,8 @@ All from real runs in the demo, on the open-source [`developit/mitt`](https://gi
 | **Visibility** | Four agents, one docs task: **$0.08 (Claude Code) to $0.65 (Gemini CLI), an 8× spread**, metered per task on the Usage page, with a monthly budget the server enforces |
 | **Breadth** | **All 10 harnesses verified** on real tasks (37–57 s, $0.01–$0.13 each for a code question) |
 | **Integration** | **One API** for all of it: HarnessRouter's Responses API |
+
+![Same task, two agents, side by side: Codex on gpt-6-luna ($0.03, Fastest, Cheapest) vs Qwen Code on qwen3.8-max ($0.90, all tests passing)](docs/race.jpg)
 
 ## Sponsors used
 
